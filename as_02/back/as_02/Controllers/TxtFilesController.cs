@@ -41,7 +41,7 @@ namespace as_02.Controllers
             try
             {
                 _txtFileService.UpdateTxtFile(txtFile);
-                return Ok("Ok");
+                return Ok("trubles");
             }
             catch
             {
@@ -50,11 +50,11 @@ namespace as_02.Controllers
         }
         [HttpGet]
         [Route("/get/{name}")]
-        public ActionResult Get(string name)
+        public ActionResult Get(TxtFile txtFile)
         {
             try 
             {
-                TxtFile txtFile = _txtFileService.GetTxtFilebyName(name);
+                txtFile = _txtFileService.GetTxtFilebyName(txtFile);
                 if (txtFile == null)
                 {
                     return Ok("Файл не найден");
@@ -74,15 +74,8 @@ namespace as_02.Controllers
         {
             try
             {
-                List<TxtFile> txtFiles= _txtFileService.GetAllTxtFiles();
-                if (txtFiles.Count == 0)
-                {
-                    return Ok("Файлов нет");
-                }
-                else
-                {
-                    return Ok(txtFiles);
-                }
+                var txtFiles= _txtFileService.GetAllTxtFiles();
+                return Ok(txtFiles);
 
             }
             catch
