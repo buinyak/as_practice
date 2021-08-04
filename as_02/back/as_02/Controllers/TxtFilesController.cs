@@ -41,7 +41,7 @@ namespace as_02.Controllers
             try
             {
                 _txtFileService.UpdateTxtFile(txtFile);
-                return Ok("trubles");
+                return Ok("Cool");
             }
             catch
             {

@@ -1,8 +1,8 @@
 <template>
   <div class="FileRedactor">
     <div class="buttons">
-      <div v-if="chosedFile.name!=null"  style="border-left-color:white" class="button">
-        <input v-on:change="HandleFileUpload()" accept=".txt" type="file"  id="file" ref="file" />
+      <div v-if="chosedFile.name!=null" style="border-left-color:white" class="button">
+        <input v-on:change="HandleFileUpload()" accept=".txt" type="file" id="file" ref="file"/>
       </div>
       <div @click="SaveFileServer()" v-if="chosedFile.name!=null" class="button">
         Сохранить на сервер
@@ -10,8 +10,11 @@
     </div>
     <div class="bar">
       <div class="navigate">
-        <div @click="chosedFile = file" class="file" v-for="file in files" v-bind:key="file.id">
-          {{ file.name }}
+        <div v-for="dir in dirs" v-bind:key="dir.id">
+          {{"papka"}}
+          <div @click="chosedFile = file" class="file" v-for="file in dir" v-bind:key="file.id">
+            {{ file.name }}
+          </div>
         </div>
       </div>
       <textarea v-model="chosedFile.text" class="redactor">
@@ -23,14 +26,13 @@
 <script>
 import axios from 'axios';
 
-
 export default {
   name: 'FileRedactor',
   props: {},
   data() {
     return {
       chosedFile: {},
-      files: [],
+      dirs: null,
     }
   },
   mounted() {
@@ -38,7 +40,7 @@ export default {
   },
   methods: {
 
-    HandleFileUpload(){
+    HandleFileUpload() {
       const reader = new FileReader();
       reader.onload = e => this.chosedFile.text = e.target.result;
       reader.readAsText(this.$refs.file.files[0])
@@ -50,8 +52,8 @@ export default {
             text: this.chosedFile.text
           }
       ).then(response => {
-        this.files = this.GetAllFiles();
-        console.log(response.data)
+        this.dirs = this.GetAllFiles();
+        console.log(response.data);
       }).catch((error) => {
         console.log(error);
       })
@@ -60,7 +62,7 @@ export default {
     GetAllFiles() {
       axios.get('https://localhost:44390/getAll'
       ).then(response => {
-        this.files = response.data;
+        this.dirs = response.data;
         console.log(response.data)
       }).catch((error) => {
         console.log(error);
