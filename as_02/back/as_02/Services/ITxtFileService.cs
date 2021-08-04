@@ -9,8 +9,8 @@ namespace as_02.Interfaces
     public interface ITxtFileService
     {
         void CreateTxtFile(TxtFile txtFile);
-        TxtFile GetTxtFilebyName(string name);
-        List<TxtFile> GetAllTxtFiles();
+        TxtFile GetTxtFilebyName(TxtFile txtFile);
+        dynamic GetAllTxtFiles();
         void UpdateTxtFile(TxtFile txtFile);
     }
 }
