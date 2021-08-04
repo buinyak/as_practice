@@ -35,10 +35,11 @@ namespace as_02.Services
             string[] dirs = Directory.GetDirectories(@"txtfiles\");
             foreach(string dir in dirs)
             {
-                txtFiles.Add(dir.Substring(9), new List<TxtFile>());
-                foreach (string file in Directory.GetFiles(@"txtfiles\"+dir.Substring(9)))
+                string dirName = dir.Substring(9);
+                txtFiles.Add(dirName, new List<TxtFile>());
+                foreach (string file in Directory.GetFiles(@"txtfiles\"+ dirName))
                 {
-                    txtFiles[dir.Substring(9)].Add(new TxtFile { Name = file.Substring(9) });
+                    txtFiles[dirName].Add(GetTxtFilebyName(new TxtFile { Name = file.Substring(dir.Length+1),Type = dirName })) ;
                 }
             }
             return txtFiles;
@@ -55,7 +56,6 @@ namespace as_02.Services
         public void UpdateTxtFile(TxtFile txtFile)
         {
             if (txtFile.Name.Substring(txtFile.Name.Length - 4) != ".txt") { txtFile.Name += ".txt"; }
-            if (GetTxtFilebyName(txtFile) != null)
             {
                 using (StreamWriter streamWriter = new StreamWriter(@"txtfiles\" + txtFile.Type + "\\" + txtFile.Name))
                 {
