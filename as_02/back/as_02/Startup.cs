@@ -26,10 +26,12 @@ namespace as_02
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
 
-            string connectionString = "Server=GB\\AnReshProbation;Integrated Security=True";
+            string connectionString = "Server=GB; Initial Catalog=AnReshProbation; Integrated Security=True";
             services.AddTransient<IStaffRepository, StaffRepository>(provider => new StaffRepository(connectionString));
+            services.AddTransient<IDepartmentRepository, DepartmentRepository>(provider => new DepartmentRepository(connectionString));
+
+            services.AddControllers();
 
             services.AddSingleton<ITxtFileRepository, TxtFileRepository>();
             services.AddCors(options =>
@@ -46,17 +48,14 @@ namespace as_02
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseCors(MyAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();
             });
         }
     }

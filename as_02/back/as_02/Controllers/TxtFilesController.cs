@@ -12,6 +12,7 @@ using as_02.Services;
 namespace as_02.Controllers
 {
     [ApiController]
+    [Route("txtFiles/[action]")]
     public class TxtFilesController : ControllerBase
     {
         private readonly ITxtFileRepository _txtFileRepository;
@@ -21,7 +22,6 @@ namespace as_02.Controllers
             _txtFileRepository = txtFileRepository;
         }
         [HttpPost]
-        [Route("/create")]
         public IActionResult Create([FromBody]  TxtFile txtFile)
         {
             try
@@ -35,7 +35,6 @@ namespace as_02.Controllers
             }
         }
         [HttpPost]
-        [Route("/update")]  
         public IActionResult Update([FromBody]  TxtFile txtFile)
         {
             try
@@ -53,15 +52,14 @@ namespace as_02.Controllers
                         error = "Ошибка валидации файла"
                     });
                 }
-                
+
             }
             catch
             {
                 return BadRequest();
             }
         }
-        [HttpGet]
-        [Route("/get/{name}")]
+        [HttpGet("{name}/{type}")]
         public ActionResult Get(TxtFile txtFile)
         {
             try 
@@ -81,7 +79,6 @@ namespace as_02.Controllers
             } 
         }
         [HttpGet]
-        [Route("/getAll")]
         public ActionResult GetAll()
         {
             try

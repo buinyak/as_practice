@@ -12,7 +12,7 @@ using as_02.Services;
 namespace as_02.Controllers
 {
     [ApiController]
-    [Route("Departments")]
+    [Route("departments/[action]")]
     public class DepartmentsController : ControllerBase
     {
         private readonly IDepartmentRepository _departmentRepository;
@@ -22,7 +22,6 @@ namespace as_02.Controllers
             _departmentRepository = departmentRepository;
         }
         [HttpPost]
-        [Route("/create")]
         public IActionResult Create([FromBody]  Department department)
         {
             try
@@ -35,8 +34,7 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
-        [HttpPost]
-        [Route("/update")]  
+        [HttpPost] 
         public IActionResult Update([FromBody]  Department department)
         {
             try
@@ -49,8 +47,7 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
-        [HttpGet]
-        [Route("/get/{id}")]
+        [HttpGet("{id}")]
         public ActionResult Get(int id)
         {
             try 
@@ -70,7 +67,6 @@ namespace as_02.Controllers
             } 
         }
         [HttpGet]
-        [Route("/getAll")]
         public ActionResult GetAll()
         {
             try
