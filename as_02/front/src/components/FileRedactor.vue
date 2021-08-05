@@ -13,7 +13,7 @@
           <div class="dirName">
             {{activeNav}}\
           </div>
-          <div @click="chosedFile = file" class="fileName" v-for="file in dirs" v-bind:key="file.id">
+          <div @click="chosedFile = file" class="fileName" v-for="file in dirs[this.activeNav]" v-bind:key="file.id">
             {{ file.name }}
           </div>
       </div>
@@ -85,7 +85,7 @@ export default {
     GetAllFiles() {
       axios.get('https://localhost:44390/getAll'
       ).then(response => {
-        this.dirs = response.data[this.activeNav];
+        this.dirs = response.data;
       }).catch((error) => {
         console.log(error);
       })
