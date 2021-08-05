@@ -1,10 +1,10 @@
 <template>
   <div class="Navigate">
     <div class="NavigatePanel">
-      <div :class="{ activeNav : activeNav==='ruFiles'}" @click="$router.push('/ruFiles');activeNav='ruFiles';" class="buttonNav" style="border-left:0">Russian
+      <div :class="{ activeButtonNav : activeNav==='ruFiles'}" @click="$router.push('/ruFiles').catch(()=>{});activeNav='ruFiles';" class="buttonNav" style="border-left:0">Russian
     </div>
-    <div :class="{ activeNav : activeNav==='engFiles'}" @click="$router.push('/engFiles');activeNav='engFiles';" class="buttonNav">English</div>
-    <div :class="{ activeNav : activeNav==='digitFiles'}" @click="$router.push('/digitFiles');activeNav='digitFiles';" class="buttonNav">Digital</div>
+    <div :class="{ activeButtonNav : activeNav==='engFiles'}" @click="$router.push('/engFiles').catch(()=>{});activeNav='engFiles';" class="buttonNav">English</div>
+    <div :class="{ activeButtonNav : activeNav==='digitFiles'}" @click="$router.push('/digitFiles').catch(()=>{});activeNav='digitFiles';" class="buttonNav">Digital</div>
   </div>
   <FileRedactor :activeNav="activeNav"></FileRedactor>
   </div>
@@ -44,7 +44,7 @@ export default {
   text-align: center;
   border-bottom: 0;
 
-  .activeNav{
+  .activeButtonNav{
     background-color: #b9b9b9;
   }
   .buttonNav {

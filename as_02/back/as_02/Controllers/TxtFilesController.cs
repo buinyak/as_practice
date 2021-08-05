@@ -31,7 +31,7 @@ namespace as_02.Controllers
             }
             catch
             {
-                return Ok("Error");
+                return BadRequest();
             }
         }
         [HttpPost]
@@ -47,13 +47,17 @@ namespace as_02.Controllers
                 }
                 else
                 {
-                    return Ok("Файл не прошёл валидацию");
+
+                    return Ok(new
+                    {
+                        error = "Ошибка валидации файла"
+                    });
                 }
                 
             }
             catch
             {
-                return Ok("Error");
+                return BadRequest();
             }
         }
         [HttpGet]
@@ -73,7 +77,7 @@ namespace as_02.Controllers
             } 
             catch 
             {
-                return Ok("Error");
+                return BadRequest();
             } 
         }
         [HttpGet]
@@ -88,7 +92,7 @@ namespace as_02.Controllers
             }
             catch
             {
-                return Ok("Error");
+                return BadRequest();
             }
         }
     }
