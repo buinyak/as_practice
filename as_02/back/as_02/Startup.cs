@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using as_02.Interfaces;
+using as_02.Repositories;
 using as_02.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,8 +26,14 @@ namespace as_02
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-            services.AddSingleton<ITxtFileService, TxtFileService>();
+
+            string connectionString = "Server=GB; Initial Catalog=AnReshProbation; Integrated Security=True";
+            services.AddTransient<IStaffRepository, StaffRepository>(provider => new StaffRepository(connectionString));
+            services.AddTransient<IDepartmentRepository, DepartmentRepository>(provider => new DepartmentRepository(connectionString));
+
+            services.AddControllers();
+
+            services.AddSingleton<ITxtFileRepository, TxtFileRepository>();
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -41,17 +48,14 @@ namespace as_02
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseCors(MyAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();
             });
         }
     }

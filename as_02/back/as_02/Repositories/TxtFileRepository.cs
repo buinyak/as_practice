@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace as_02.Services
 {
-    public class TxtFileService : ITxtFileService
+    public class TxtFileRepository : ITxtFileRepository
     {
         public TxtFile GetTxtFilebyName(TxtFile txtFile)
         {

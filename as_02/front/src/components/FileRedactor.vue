@@ -48,7 +48,7 @@ export default {
       reader.readAsText(this.$refs.file.files[0]);
     },
     SaveFileServer() {
-        axios.post('https://localhost:44390/update', {
+        axios.post('https://localhost:44390/txtfiles/update', {
               name: this.chosedFile.name,
               text: this.chosedFile.text,
               type: this.chosedFile.type
@@ -65,7 +65,7 @@ export default {
     },
 
     GetAllFiles() {
-      axios.get('https://localhost:44390/getAll'
+      axios.get('https://localhost:44390/txtfiles/getAll'
       ).then(response => {
         this.dirs = response.data;
       }).catch((error) => {

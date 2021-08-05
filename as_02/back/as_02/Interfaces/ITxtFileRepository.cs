@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace as_02.Interfaces
 {
-    public interface ITxtFileService
+    public interface ITxtFileRepository
     {
         void CreateTxtFile(TxtFile txtFile);
         TxtFile GetTxtFilebyName(TxtFile txtFile);

@@ -12,21 +12,21 @@ using as_02.Services;
 namespace as_02.Controllers
 {
     [ApiController]
+    [Route("txtFiles/[action]")]
     public class TxtFilesController : ControllerBase
     {
-        private readonly ITxtFileService _txtFileService;
+        private readonly ITxtFileRepository _txtFileRepository;
 
-        public TxtFilesController(ITxtFileService txtFileService)
+        public TxtFilesController(ITxtFileRepository txtFileRepository)
         {
-            _txtFileService = txtFileService;
+            _txtFileRepository = txtFileRepository;
         }
         [HttpPost]
-        [Route("/create")]
         public IActionResult Create([FromBody]  TxtFile txtFile)
         {
             try
             {
-                _txtFileService.CreateTxtFile(txtFile);
+                _txtFileRepository.CreateTxtFile(txtFile);
                 return Ok(txtFile);
             }
             catch
@@ -35,14 +35,13 @@ namespace as_02.Controllers
             }
         }
         [HttpPost]
-        [Route("/update")]  
         public IActionResult Update([FromBody]  TxtFile txtFile)
         {
             try
             {
                 if (txtFile.IsValid())
                 {
-                    _txtFileService.UpdateTxtFile(txtFile);
+                    _txtFileRepository.UpdateTxtFile(txtFile);
                     return Ok(txtFile);
                 }
                 else
@@ -53,20 +52,19 @@ namespace as_02.Controllers
                         error = "Ошибка валидации файла"
                     });
                 }
-                
+
             }
             catch
             {
                 return BadRequest();
             }
         }
-        [HttpGet]
-        [Route("/get/{name}")]
+        [HttpGet("{name}/{type}")]
         public ActionResult Get(TxtFile txtFile)
         {
             try 
             {
-                _txtFileService.GetTxtFilebyName(txtFile);
+                _txtFileRepository.GetTxtFilebyName(txtFile);
                 if (txtFile == null)
                 {
                     return Ok("Файл не найден");
@@ -81,12 +79,11 @@ namespace as_02.Controllers
             } 
         }
         [HttpGet]
-        [Route("/getAll")]
         public ActionResult GetAll()
         {
             try
             {
-                var txtFiles= _txtFileService.GetAllTxtFiles();
+                var txtFiles= _txtFileRepository.GetAllTxtFiles();
                 return Ok(txtFiles);
 
             }
