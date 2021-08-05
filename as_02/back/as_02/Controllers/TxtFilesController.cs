@@ -27,11 +27,11 @@ namespace as_02.Controllers
             try
             {
                 _txtFileService.CreateTxtFile(txtFile);
-                return Ok("Ok");
+                return Ok(txtFile);
             }
             catch
             {
-                return Ok("Error");
+                return BadRequest();
             }
         }
         [HttpPost]
@@ -40,12 +40,24 @@ namespace as_02.Controllers
         {
             try
             {
-                _txtFileService.UpdateTxtFile(txtFile);
-                return Ok("Cool");
+                if (txtFile.IsValid())
+                {
+                    _txtFileService.UpdateTxtFile(txtFile);
+                    return Ok(txtFile);
+                }
+                else
+                {
+
+                    return Ok(new
+                    {
+                        error = "Ошибка валидации файла"
+                    });
+                }
+                
             }
             catch
             {
-                return Ok("Error");
+                return BadRequest();
             }
         }
         [HttpGet]
@@ -54,7 +66,7 @@ namespace as_02.Controllers
         {
             try 
             {
-                txtFile = _txtFileService.GetTxtFilebyName(txtFile);
+                _txtFileService.GetTxtFilebyName(txtFile);
                 if (txtFile == null)
                 {
                     return Ok("Файл не найден");
@@ -65,7 +77,7 @@ namespace as_02.Controllers
             } 
             catch 
             {
-                return Ok("Error");
+                return BadRequest();
             } 
         }
         [HttpGet]
@@ -80,7 +92,7 @@ namespace as_02.Controllers
             }
             catch
             {
-                return Ok("Error");
+                return BadRequest();
             }
         }
     }
