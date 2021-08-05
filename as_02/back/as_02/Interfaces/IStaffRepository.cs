@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace as_02.Interfaces
 {
-    interface IStaffRepository
+    public interface IStaffRepository
     {
         void Create(Staff staff);
         void DeleteById(int id);

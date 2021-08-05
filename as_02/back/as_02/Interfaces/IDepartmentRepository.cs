@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace as_02.Interfaces
 {
-    interface IDepartmentRepository
+    public interface IDepartmentRepository
     {
         void Create(Department department);
         void DeleteById(int id);

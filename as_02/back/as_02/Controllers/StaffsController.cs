@@ -12,22 +12,23 @@ using as_02.Services;
 namespace as_02.Controllers
 {
     [ApiController]
-    public class TxtFilesController : ControllerBase
+    [Route("staffs")]
+    public class StaffsController : ControllerBase
     {
-        private readonly ITxtFileRepository _txtFileRepository;
+        private readonly IStaffRepository _staffRepository;
 
-        public TxtFilesController(ITxtFileRepository txtFileRepository)
+        public StaffsController(IStaffRepository staffRepository)
         {
-            _txtFileRepository = txtFileRepository;
+            _staffRepository = staffRepository;
         }
         [HttpPost]
         [Route("/create")]
-        public IActionResult Create([FromBody]  TxtFile txtFile)
+        public IActionResult Create([FromBody]  Staff staff)
         {
             try
             {
-                _txtFileRepository.CreateTxtFile(txtFile);
-                return Ok(txtFile);
+                _staffRepository.Create(staff);
+                return Ok(staff);
             }
             catch
             {
@@ -36,24 +37,12 @@ namespace as_02.Controllers
         }
         [HttpPost]
         [Route("/update")]  
-        public IActionResult Update([FromBody]  TxtFile txtFile)
+        public IActionResult Update([FromBody]  Staff staff)
         {
             try
             {
-                if (txtFile.IsValid())
-                {
-                    _txtFileRepository.UpdateTxtFile(txtFile);
-                    return Ok(txtFile);
-                }
-                else
-                {
-
-                    return Ok(new
-                    {
-                        error = "Ошибка валидации файла"
-                    });
-                }
-                
+                _staffRepository.Update(staff);
+                return Ok(staff);
             }
             catch
             {
@@ -61,17 +50,17 @@ namespace as_02.Controllers
             }
         }
         [HttpGet]
-        [Route("/get/{name}")]
-        public ActionResult Get(TxtFile txtFile)
+        [Route("/get/{id}")]
+        public ActionResult Get(int id)
         {
             try 
             {
-                _txtFileRepository.GetTxtFilebyName(txtFile);
-                if (txtFile == null)
+                Staff staff = _staffRepository.GetById(id);
+                if (staff == null)
                 {
                     return Ok("Файл не найден");
                 }else {
-                    return Ok(txtFile);
+                    return Ok(staff);
                 }
                 
             } 
@@ -86,8 +75,8 @@ namespace as_02.Controllers
         {
             try
             {
-                var txtFiles= _txtFileRepository.GetAllTxtFiles();
-                return Ok(txtFiles);
+                List<Staff> staffs= _staffRepository.GetAllStaffs();
+                return Ok(staffs);
 
             }
             catch
