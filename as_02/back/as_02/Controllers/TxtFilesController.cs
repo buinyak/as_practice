@@ -14,11 +14,12 @@ namespace as_02.Controllers
     [ApiController]
     public class TxtFilesController : ControllerBase
     {
-        private readonly ITxtFileService _txtFileService;
+        private readonly ITxtFileRepository _txtFileRepository;
+        private readonly IStaffRepository _staffRepository;
 
-        public TxtFilesController(ITxtFileService txtFileService)
+        public TxtFilesController(ITxtFileRepository txtFileService)
         {
-            _txtFileService = txtFileService;
+            _txtFileRepository = txtFileService;
         }
         [HttpPost]
         [Route("/create")]
@@ -26,7 +27,7 @@ namespace as_02.Controllers
         {
             try
             {
-                _txtFileService.CreateTxtFile(txtFile);
+                _txtFileRepository.CreateTxtFile(txtFile);
                 return Ok(txtFile);
             }
             catch
@@ -42,7 +43,7 @@ namespace as_02.Controllers
             {
                 if (txtFile.IsValid())
                 {
-                    _txtFileService.UpdateTxtFile(txtFile);
+                    _txtFileRepository.UpdateTxtFile(txtFile);
                     return Ok(txtFile);
                 }
                 else
@@ -66,7 +67,7 @@ namespace as_02.Controllers
         {
             try 
             {
-                _txtFileService.GetTxtFilebyName(txtFile);
+                _txtFileRepository.GetTxtFilebyName(txtFile);
                 if (txtFile == null)
                 {
                     return Ok("Файл не найден");
@@ -86,7 +87,7 @@ namespace as_02.Controllers
         {
             try
             {
-                var txtFiles= _txtFileService.GetAllTxtFiles();
+                var txtFiles= _txtFileRepository.GetAllTxtFiles();
                 return Ok(txtFiles);
 
             }
