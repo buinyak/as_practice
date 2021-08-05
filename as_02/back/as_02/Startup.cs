@@ -25,7 +25,6 @@ namespace as_02
 
         public void ConfigureServices(IServiceCollection services)
         {
-            
             services.AddMvc();
             services.AddSingleton<ITxtFileService, TxtFileService>();
             services.AddCors(options =>

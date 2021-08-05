@@ -1,16 +1,15 @@
 <template>
   <div id="app">
-    <FileRedactor/>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import FileRedactor from './components/FileRedactor.vue'
+
 
 export default {
   name: 'App',
   components: {
-    FileRedactor
   }
 }
 </script>
