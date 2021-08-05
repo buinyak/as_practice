@@ -1,23 +1,21 @@
 <template>
   <div class="FileRedactor">
     <div class="buttons">
-      <div v-if="chosedFile.name!=null" style="border-left-color:white" class="button">
+      <div v-if="chosedFile.name!=null" style="border-left:0" class="button">
         <input v-on:change="HandleFileUpload()" accept=".txt" type="file" id="file" ref="file"/>
       </div>
-      <div @click="SaveFileServer()" v-if="chosedFile.name!=null" class="button">
+      <button @click="SaveFileServer()" v-if="chosedFile.name!=null" class="button">
         Сохранить на сервер
-      </div>
+      </button>
     </div>
     <div class="bar">
       <div class="navigate">
-        <div v-for="dir in dirs" v-bind:key="dir.id">
           <div class="dirName">
-            {{ dir[0].type }}\
+            {{activeNav}}\
           </div>
-          <div @click="chosedFile = file" class="fileName" v-for="file in dir" v-bind:key="file.id">
+          <div @click="chosedFile = file" class="fileName" v-for="file in dirs[this.activeNav]" v-bind:key="file.id">
             {{ file.name }}
           </div>
-        </div>
       </div>
       <textarea v-model="chosedFile.text" class="redactor">
       </textarea>
@@ -27,17 +25,19 @@
 
 <script>
 import axios from 'axios';
+import Navigate from "@/components/Navigate";
 
 export default {
   name: 'FileRedactor',
-  props: {},
+  props: ['activeNav'],
+  comments: {Navigate},
   data() {
     return {
       chosedFile: {},
-      dirs: null,
+      dirs: {}
     }
   },
-  mounted() {
+  beforeMount() {
     this.GetAllFiles();
   },
   methods: {
@@ -47,39 +47,21 @@ export default {
       reader.onload = e => this.chosedFile.text = e.target.result;
       reader.readAsText(this.$refs.file.files[0]);
     },
-    ValidTxtFiles() {
-      let matcher;
-      switch (this.chosedFile.type) {
-        case "digitFiles":
-          matcher = /[^0-9]/;
-          break;
-        case "ruFiles":
-          matcher = /[^а-яА-Я]/;
-          break;
-        case "engFiles":
-          matcher = /[^a-zA-Z]/;
-          break;
-      }
-      console.log(this.chosedFile.text.match(matcher));
-      return this.chosedFile.text.match(matcher) == null;
-    },
     SaveFileServer() {
-      if (this.ValidTxtFiles()) {
         axios.post('https://localhost:44390/update', {
               name: this.chosedFile.name,
               text: this.chosedFile.text,
               type: this.chosedFile.type
             }
         ).then(response => {
-          this.dirs = this.GetAllFiles();
+          if(response.data['error']){
+            alert(response.data['error'])
+          }
           console.log(response.data);
         }).catch((error) => {
+          alert(error.data);
           console.log(error);
         })
-      } else {
-        alert("неверный формат");
-      }
-
     },
 
     GetAllFiles() {
@@ -126,7 +108,9 @@ export default {
       width: 100%;
       box-sizing: border-box;
       border-radius: 0;
+      border:0;
       border-left: 1px solid black;
+      background-color:white;
       display: inline-flex;
       align-items: center;
       justify-content: center;
