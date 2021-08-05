@@ -27,7 +27,7 @@ namespace as_02.Controllers
             try
             {
                 _txtFileService.CreateTxtFile(txtFile);
-                return Ok("Ok");
+                return Ok(txtFile);
             }
             catch
             {
@@ -40,8 +40,16 @@ namespace as_02.Controllers
         {
             try
             {
-                _txtFileService.UpdateTxtFile(txtFile);
-                return Ok("Cool");
+                if (txtFile.IsValid())
+                {
+                    _txtFileService.UpdateTxtFile(txtFile);
+                    return Ok(txtFile);
+                }
+                else
+                {
+                    return Ok("Файл не прошёл валидацию");
+                }
+                
             }
             catch
             {
@@ -54,7 +62,7 @@ namespace as_02.Controllers
         {
             try 
             {
-                txtFile = _txtFileService.GetTxtFilebyName(txtFile);
+                _txtFileService.GetTxtFilebyName(txtFile);
                 if (txtFile == null)
                 {
                     return Ok("Файл не найден");
