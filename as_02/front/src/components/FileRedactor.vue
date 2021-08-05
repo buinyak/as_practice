@@ -10,14 +10,12 @@
     </div>
     <div class="bar">
       <div class="navigate">
-        <div v-for="dir in dirs" v-bind:key="dir.id">
           <div class="dirName">
-            {{ dir[0].type }}\
+            {{activeNav}}\
           </div>
-          <div @click="chosedFile = file" class="fileName" v-for="file in dir" v-bind:key="file.id">
+          <div @click="chosedFile = file" class="fileName" v-for="file in dirs" v-bind:key="file.id">
             {{ file.name }}
           </div>
-        </div>
       </div>
       <textarea v-model="chosedFile.text" class="redactor">
       </textarea>
@@ -27,10 +25,12 @@
 
 <script>
 import axios from 'axios';
+import Navigate from "@/components/Navigate";
 
 export default {
   name: 'FileRedactor',
-  props: {},
+  props: ['activeNav'],
+  comments: {Navigate},
   data() {
     return {
       chosedFile: {},
@@ -85,7 +85,7 @@ export default {
     GetAllFiles() {
       axios.get('https://localhost:44390/getAll'
       ).then(response => {
-        this.dirs = response.data;
+        this.dirs = response.data[this.activeNav];
       }).catch((error) => {
         console.log(error);
       })
