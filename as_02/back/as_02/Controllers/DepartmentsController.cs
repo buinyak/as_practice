@@ -80,6 +80,20 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet]
+        public ActionResult GetAllStaffsWithDepartments()
+        {
+            try
+            {
+                var departments = _departmentRepository.GetAllStaffsWithDepartments();
+                return Ok(departments);
+
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
     
 }

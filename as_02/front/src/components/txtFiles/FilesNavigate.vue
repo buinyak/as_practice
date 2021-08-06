@@ -1,30 +1,34 @@
 <template>
-  <div class="Navigate">
+  <div class="FilesNavigate">
     <div class="NavigatePanel">
-      <div :class="{ activeButtonNav : activeNav==='ruFiles'}" @click="$router.push('/ruFiles').catch(()=>{});activeNav='ruFiles';" class="buttonNav" style="border-left:0">Russian
+      <div :class="{ activeButtonNav : activeNav==='ruFiles'}"
+           @click="$router.push('/ruFiles').catch(()=>{});activeNav='ruFiles';" class="buttonNav" style="border-left:0">
+        Russian
+      </div>
+      <div :class="{ activeButtonNav : activeNav==='engFiles'}"
+           @click="$router.push('/engFiles').catch(()=>{});activeNav='engFiles';" class="buttonNav">English
+      </div>
+      <div :class="{ activeButtonNav : activeNav==='digitFiles'}"
+           @click="$router.push('/digitFiles').catch(()=>{});activeNav='digitFiles';" class="buttonNav">Digital
+      </div>
     </div>
-    <div :class="{ activeButtonNav : activeNav==='engFiles'}" @click="$router.push('/engFiles').catch(()=>{});activeNav='engFiles';" class="buttonNav">English</div>
-    <div :class="{ activeButtonNav : activeNav==='digitFiles'}" @click="$router.push('/digitFiles').catch(()=>{});activeNav='digitFiles';" class="buttonNav">Digital</div>
-  </div>
-  <FileRedactor :activeNav="activeNav"></FileRedactor>
+    <FileRedactor :activeNav="activeNav"></FileRedactor>
   </div>
 </template>
 
 <script>
-import FileRedactor from "@/components/FileRedactor";
+import FileRedactor from "@/components/txtFiles/FileRedactor";
 
 export default {
-  name: "Navigate",
+  name: "FilesNavigate",
   components: {FileRedactor},
   props: {},
   data() {
     return {
-      activeNav:"ruFiles",
+      activeNav: "ruFiles",
     }
   },
-  methods: {
-
-  }
+  methods: {}
 }
 
 </script>
@@ -44,9 +48,10 @@ export default {
   text-align: center;
   border-bottom: 0;
 
-  .activeButtonNav{
+  .activeButtonNav {
     background-color: #b9b9b9;
   }
+
   .buttonNav {
     height: 100%;
     cursor: pointer;

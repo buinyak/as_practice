@@ -13,5 +13,7 @@ namespace as_02.Interfaces
         Department GetById(int id);
         List<Department> GetAllDepartments();
         void Update(Department department);
+
+        dynamic GetAllStaffsWithDepartments();
     }
 }

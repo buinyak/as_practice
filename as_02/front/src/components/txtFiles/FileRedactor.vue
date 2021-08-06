@@ -25,12 +25,10 @@
 
 <script>
 import axios from 'axios';
-import Navigate from "@/components/Navigate";
 
 export default {
   name: 'FileRedactor',
   props: ['activeNav'],
-  comments: {Navigate},
   data() {
     return {
       chosedFile: {},

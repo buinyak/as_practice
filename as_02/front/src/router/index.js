@@ -1,5 +1,7 @@
 import VueRouter from 'vue-router'
-import Navigate from "@/components/Navigate";
+import FilesNavigate from "@/components/txtFiles/FilesNavigate";
+import StaffsPage from "@/components/StaffsDepartments/StaffsPage";
+import DepartmentsPage from "@/components/StaffsDepartments/DepartmentsPage";
 
 
 export default new VueRouter({
@@ -7,19 +9,27 @@ export default new VueRouter({
     routes:[
         {
             path:'/',
-            component:Navigate
+            component:FilesNavigate
         },
         {
             path:'/engFiles',
-            component:Navigate
+            component:FilesNavigate
         },
         {
             path:'/ruFiles',
-            component:Navigate
+            component:FilesNavigate
         },
         {
             path:'/digitFiles',
-            component:Navigate
+            component:FilesNavigate
+        },
+        {
+            path:'/staffs',
+            component:StaffsPage
+        },
+        {
+            path:'/departments',
+            component:DepartmentsPage
         }
     ]
 })
