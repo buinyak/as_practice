@@ -9,8 +9,8 @@ namespace as_02.Models
     {
         public int Id { get; set; }
         public int Department_id { get; set; }
-        public string fio { get; set; }
-        public float salary { get; set; }
+        public string Fio { get; set; }
+        public float Salary { get; set; }
 
     }
 }

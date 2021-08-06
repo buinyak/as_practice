@@ -80,6 +80,20 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet]
+        public ActionResult GetAllWithDepNames()
+        {
+            try
+            {
+                List<Staff> staffs = _staffRepository.GetAllStaffs();
+                return Ok(staffs);
+
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
     
 }

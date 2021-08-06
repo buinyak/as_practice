@@ -32,7 +32,16 @@ namespace as_02.Repositories
                 return db.Query<Department>("SELECT * FROM Departments WHERE Id = @id", new { id }).FirstOrDefault();
             }
         }
-
+        public dynamic GetAllStaffsWithDepartments()
+        {
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {
+                var deps = db.Query<Object>(
+                    "SELECT DEP.id AS department_id,DEP.Name AS department_name,STAFF.id AS id,STAFF.Fio AS fio,STAFF.Salary AS salary " +
+                    "FROM Departments DEP INNER JOIN Staffs STAFF ON DEP.Id = STAFF.Department_id");
+                return deps;
+            }
+        }
         public void Create(Department Department)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
