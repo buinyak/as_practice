@@ -18,14 +18,26 @@
         <div @click="CreateStaff()" class="buttonAdd">Добавить</div>
       </div>
     </div>
-    <div v-for="(staff,index) in staffs" v-bind:key="staff.id" class="staffItems">
-      <div class="staffItem">{{ staff.id }}</div>
-      <div class="staffItem">{{ staff.department_name }}</div>
-      <div class="staffItem">{{ staff.fio }}</div>
-      <div class="staffItem">{{ staff.salary }}</div>
-      <div class="buttonUpdate">Изменить</div>
-      <div class="buttonDelete" @click="DeleteStaff(staff,index)">Удалить</div>
-
+    <div v-for="(staff,index) in staffs" v-bind:key="staff.id">
+      <div v-if="isUpdateStaff!=staff" class="staffItems">
+        <div class="staffItem">{{ staff.id }}</div>
+        <div class="staffItem">{{ staff.department_name }}</div>
+        <div class="staffItem">{{ staff.fio }}</div>
+        <div class="staffItem">{{ staff.salary }}</div>
+        <div @click="isUpdateStaff=staff;updateStaff = staff;" class="buttonUpdate">Изменить</div>
+        <div class="buttonDelete" @click="DeleteStaff(staff,index)">Удалить</div>
+      </div>
+      <div v-if="isUpdateStaff==staff" class="updateItems">
+        <div class="updateItem">{{ staff.id }}</div>
+        <select v-model="updateStaff.department_id" class="updateItem">
+          <option value="" disabled selected>Выберите отдел</option>
+          <option v-for="dep in deps" :key="dep.id" :value="dep.id">{{ dep.name }}</option>
+        </select>
+        <input v-model="updateStaff.fio" placeholder="ФИО" class="updateItem">
+        <input v-model="updateStaff.salary" placeholder="Зарплата" class="updateItem">
+        <div @click="UpdateStaff();isUpdateStaff=null;" class="buttonConfirm">Сохранить</div>
+        <div @click="isUpdateStaff=null" class="buttonBack" >Отменить</div>
+      </div>
     </div>
   </div>
 </template>
@@ -43,7 +55,9 @@ export default {
         department_id: '',
         fio: '',
         salary: '',
-      }
+      },
+        isUpdateStaff: '',
+        updateStaff:'',
     }
   },
   beforeMount() {
@@ -74,8 +88,8 @@ export default {
         console.log(error);
       })
     },
-    DeleteStaff(staff,index) {
-      axios.delete('https://localhost:44390/staffs/delete/'+staff.id
+    DeleteStaff(staff, index) {
+      axios.delete('https://localhost:44390/staffs/delete/' + staff.id
       ).then(response => {
         this.staffs.splice(index);
         console.log(response.data);
@@ -84,7 +98,7 @@ export default {
       })
     },
     CreateStaff() {
-      if(!this.newStaff.department_id || !this.newStaff.salary || !this.newStaff.fio){
+      if (!this.newStaff.department_id || !this.newStaff.salary || !this.newStaff.fio) {
         alert("Заполните все данные");
         return;
       }
@@ -93,7 +107,21 @@ export default {
       ).then(response => {
         this.staffs.push(response.data);
         console.log(response.data);
-        this.GetAllStaffsWithDepartments()
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
+    UpdateStaff() {
+      console.log(this.updateStaff);
+
+      if (!this.updateStaff.department_id || !this.updateStaff.salary || !this.updateStaff.fio) {
+        alert("Заполните все данные");
+        return;
+      }
+      this.updateStaff.salary = parseInt(this.updateStaff.salary);
+      axios.put('https://localhost:44390/staffs/update', this.updateStaff
+      ).then(response => {
+        console.log(response.data);
       }).catch((error) => {
         console.log(error);
       })
@@ -142,7 +170,7 @@ export default {
 
   }
 
-  .newItems {
+  .updateItems, .newItems {
     display: flex;
     text-align: center;
     border-radius: 0;
@@ -152,7 +180,6 @@ export default {
 
     .buttonAdd {
       margin: auto;
-      height: 100%;
       cursor: pointer;
       width: 20%;
       box-sizing: border-box;
@@ -169,39 +196,64 @@ export default {
 
     }
 
-    .newItem {
+    .buttonConfirm, .buttonBack {
+      margin: auto;
+      height: 100%;
+      cursor: pointer;
+      width: 13%;
+      box-sizing: border-box;
+      border-radius: 0;
+      border: 1px solid black;
+      height: 50%;
+      background-color: white;
+      text-align: center;
+      vertical-align: middle;
+
+      &:hover {
+        background-color: #b9b9b9;
+      }
+    }
+
+    .updateItem, .newItem {
+      margin-top:auto;
+      margin-bottom: auto;
+      border-bottom: 1px solid black;
+      border-top: 0;
+      border-left: 0;
+      border-right: 0;
       font-size: 14pt;
-      border: 0;
       display: inline-flex;
       align-items: center;
       justify-content: left;
       text-align: left;
       box-sizing: border-box;
-      margin: 0;
       padding: 0;
       outline: none;
-
-
     }
 
     :first-child {
+      border-bottom:0;
       width: 4.5%;
       margin-left: 3%;
     }
 
     :nth-child(2) {
+
       width: 18%;
     }
 
     :nth-child(3) {
       margin-left: 2.5%;
-      width: 30%;
+      width: 27%;
+      margin-right:3%;
     }
 
     :nth-child(4) {
-      width: 12%;
+      width: 9%;
+      margin-right: 3%;
     }
   }
+
 }
 
 
@@ -258,7 +310,7 @@ export default {
   :nth-child(4) {
     width: 12%;
   }
-
 }
+
 
 </style>
