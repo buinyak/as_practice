@@ -94,6 +94,19 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                _staffRepository.DeleteById(id);
+                return Ok("Deleted");
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
     
 }
