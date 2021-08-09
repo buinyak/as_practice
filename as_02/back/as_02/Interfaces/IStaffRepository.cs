@@ -8,7 +8,7 @@ namespace as_02.Interfaces
 {
     public interface IStaffRepository
     {
-        void Create(Staff staff);
+        Staff Create(Staff staff);
         void DeleteById(int id);
         Staff GetById(int id);
         List<Staff> GetAllStaffs();

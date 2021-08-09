@@ -34,13 +34,27 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
-        [HttpPost] 
+
+        [HttpPut] 
         public IActionResult Update([FromBody]  Department department)
         {
             try
             {
                 _departmentRepository.Update(department);
                 return Ok(department);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet]
+        public IActionResult GetMidSalaries()
+        {
+            try
+            {
+
+                return Ok(_departmentRepository.GetMidSalaries());
             }
             catch
             {
@@ -88,6 +102,19 @@ namespace as_02.Controllers
                 var departments = _departmentRepository.GetAllStaffsWithDepartments();
                 return Ok(departments);
 
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                _departmentRepository.DeleteById(id);
+                return Ok("Deleted");
             }
             catch
             {

@@ -65,9 +65,17 @@ namespace as_02.Repositories
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "DELETE FROM Departments WHERE Id = @id";
+                var sqlQuery = "DELETE FROM Staffs WHERE Department_id = @id;DELETE FROM Departments WHERE Id = @id";
                 db.Execute(sqlQuery, new { id });
             }
+        }
+        public List<dynamic> GetMidSalaries()
+        {
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {
+                return db.Query<dynamic>("SELECT Department_id, AVG(Salary) AS MidSalary FROM Staffs GROUP BY Department_id").ToList();
+            }
+
         }
     }
 }

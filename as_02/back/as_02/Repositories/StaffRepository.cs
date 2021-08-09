@@ -33,13 +33,14 @@ namespace as_02.Repositories
             }
         }
 
-        public void Create(Staff Staff)
+        public Staff Create(Staff staff)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "INSERT INTO Staffs (Department_id, Fio, Salary) VALUES(@Department_id, @Fio, @Salar)";
-                db.Execute(sqlQuery, Staff);
-
+                var sqlQuery = "INSERT INTO Staffs (Department_id, Fio, Salary) VALUES(@Department_id, @Fio, @Salary); SELECT CAST(SCOPE_IDENTITY() as int)";
+                int id = db.Query<int>(sqlQuery, staff).FirstOrDefault();
+                staff.Id = id;
+                return staff;
             }
         }
 
@@ -68,5 +69,6 @@ namespace as_02.Repositories
                 return db.Query<Staff>("SELECT * FROM Staffs WHERE Id = @Id", new { id }).ToList();
             }
         }
+
     }
 }
