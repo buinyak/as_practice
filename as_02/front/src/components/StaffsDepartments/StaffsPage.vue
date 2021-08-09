@@ -1,16 +1,10 @@
 <template>
   <div class="StaffsPage">
-    <div class="staffsHeaders">
-      <div class="staffsHeader">ID</div>
-      <div class="staffsHeader">Название отдела</div>
-      <div class="staffsHeader">ФИО</div>
-      <div class="staffsHeader">Зарплата</div>
-    </div>
     <div clas="newStaff">
       <div class="newItems">
-        <input placeholder="ID" disabled="true" class="newItem">
+        <div class="newItem">ID</div>
         <select v-model="newStaff.department_id" class="newItem">
-          <option value="" disabled selected>Выберите отдел</option>
+          <option value="" disabled selected>Отдел</option>
           <option v-for="dep in deps" :key="dep.id" :value="dep.id">{{ dep.name }}</option>
         </select>
         <input v-model="newStaff.fio" placeholder="ФИО" class="newItem">
@@ -36,7 +30,7 @@
         <input v-model="updateStaff.fio" placeholder="ФИО" class="updateItem">
         <input v-model="updateStaff.salary" placeholder="Зарплата" class="updateItem">
         <div @click="UpdateStaff();isUpdateStaff=null;" class="buttonConfirm">Сохранить</div>
-        <div @click="isUpdateStaff=null" class="buttonBack" >Отменить</div>
+        <div @click="isUpdateStaff=null" class="buttonBack">Отменить</div>
       </div>
     </div>
   </div>
@@ -56,8 +50,8 @@ export default {
         fio: '',
         salary: '',
       },
-        isUpdateStaff: '',
-        updateStaff:'',
+      isUpdateStaff: '',
+      updateStaff: '',
     }
   },
   beforeMount() {
@@ -139,37 +133,6 @@ export default {
   width: 900px;
   font-size: 14pt;
 
-  .staffsHeaders {
-    box-sizing: border-box;
-    display: flex;
-    text-align: center;
-
-    .staffsHeader {
-      display: inline-flex;
-      align-items: center;
-      justify-content: left;
-      text-align: left;
-    }
-
-    :first-child {
-      width: 5%;
-      margin-left: 3%;
-    }
-
-    :nth-child(2) {
-      width: 20%;
-    }
-
-    :nth-child(3) {
-      width: 30%;
-    }
-
-    :nth-child(4) {
-      width: 15%;
-    }
-
-  }
-
   .updateItems, .newItems {
     display: flex;
     text-align: center;
@@ -198,7 +161,6 @@ export default {
 
     .buttonConfirm, .buttonBack {
       margin: auto;
-      height: 100%;
       cursor: pointer;
       width: 13%;
       box-sizing: border-box;
@@ -215,7 +177,7 @@ export default {
     }
 
     .updateItem, .newItem {
-      margin-top:auto;
+      margin-top: auto;
       margin-bottom: auto;
       border-bottom: 1px solid black;
       border-top: 0;
@@ -232,7 +194,7 @@ export default {
     }
 
     :first-child {
-      border-bottom:0;
+      border-bottom: 0;
       width: 4.5%;
       margin-left: 3%;
     }
@@ -245,7 +207,7 @@ export default {
     :nth-child(3) {
       margin-left: 2.5%;
       width: 27%;
-      margin-right:3%;
+      margin-right: 3%;
     }
 
     :nth-child(4) {

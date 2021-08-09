@@ -69,5 +69,6 @@ namespace as_02.Repositories
                 return db.Query<Staff>("SELECT * FROM Staffs WHERE Id = @Id", new { id }).ToList();
             }
         }
+
     }
 }
