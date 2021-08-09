@@ -27,14 +27,14 @@ namespace as_02.Controllers
             try
             {
                 _staffRepository.Create(staff);
-                return Ok(staff);
+                return Ok("Add");
             }
             catch
             {
                 return BadRequest();
             }
         }
-        [HttpPost]
+        [HttpPut]
         public IActionResult Update([FromBody]  Staff staff)
         {
             try
@@ -94,6 +94,20 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                _staffRepository.DeleteById(id);
+                return Ok("Deleted");
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
     }
     
 }
