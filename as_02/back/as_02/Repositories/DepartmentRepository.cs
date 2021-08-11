@@ -1,6 +1,7 @@
 ﻿using as_02.Interfaces;
 using as_02.Models;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,10 +13,12 @@ namespace as_02.Repositories
 {
     public class DepartmentRepository:IDepartmentRepository
     {
+        readonly IConfiguration _configuration;
         readonly string connectionString;
-        public DepartmentRepository(string conn)
+        public DepartmentRepository(IConfiguration configuration)
         {
-            connectionString = conn;
+            _configuration = configuration;
+            connectionString = _configuration["ConnectionString"];
         }
         public List<Department> GetAllDepartments()
         {

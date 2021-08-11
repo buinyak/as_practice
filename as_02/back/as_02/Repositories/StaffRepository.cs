@@ -1,6 +1,7 @@
 ﻿using as_02.Interfaces;
 using as_02.Models;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,10 +13,13 @@ namespace as_02.Repositories
 {
     public class StaffRepository : IStaffRepository
     {
+        readonly IConfiguration _configuration;
         readonly string connectionString;
-        public StaffRepository(string conn)
+
+        public StaffRepository(IConfiguration configuration)
         {
-            connectionString = conn;
+            _configuration = configuration;
+            connectionString = _configuration["ConnectionString"];
         }
         public List<Staff> GetAllStaffs()
         {

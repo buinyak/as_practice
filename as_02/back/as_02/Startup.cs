@@ -17,19 +17,17 @@ namespace as_02
     public class Startup
     {
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        readonly IConfiguration _configuration;
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
 
-            string connectionString = "Server=GB; Initial Catalog=AnReshProbation; Integrated Security=True";
-            services.AddTransient<IStaffRepository, StaffRepository>(provider => new StaffRepository(connectionString));
-            services.AddTransient<IDepartmentRepository, DepartmentRepository>(provider => new DepartmentRepository(connectionString));
+            services.AddTransient<IStaffRepository, StaffRepository>();
+            services.AddTransient<IDepartmentRepository, DepartmentRepository>();
 
             services.AddControllers();
 
