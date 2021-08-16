@@ -11,56 +11,46 @@ using System.Threading.Tasks;
 
 namespace as_02.Repositories
 {
-    public class DepartmentRepository:IDepartmentRepository
+    public class SkillRepository:ISkillRepository
     {
         readonly IConfiguration _configuration;
         readonly string connectionString;
-        public DepartmentRepository(IConfiguration configuration)
+        public SkillRepository(IConfiguration configuration)
         {
             _configuration = configuration;
             connectionString = _configuration["ConnectionString"];
         }
-        public List<Department> GetAllDepartments()
+        public List<Skill> GetAllSkills()
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<Department>("SELECT * FROM Departments").ToList();
+                return db.Query<Skill>("SELECT * FROM Skills").ToList();
             }
         }
 
-        public Department GetById(int id)
+        public Skill GetById(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<Department>("SELECT * FROM Departments WHERE Id = @id", new { id }).FirstOrDefault();
+                return db.Query<Skill>("SELECT * FROM Skills WHERE Id = @id", new { id }).FirstOrDefault();
             }
         }
-        public dynamic GetAllStaffsWithDepartments()
+        public void Create(Skill Skill)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var deps = db.Query<Object>(
-                    "SELECT DEP.id AS department_id,DEP.Name AS department_name,STAFF.id AS id,STAFF.Fio AS fio,STAFF.Salary AS salary " +
-                    "FROM Departments DEP INNER JOIN Staffs STAFF ON DEP.Id = STAFF.Department_id");
-                return deps;
-            }
-        }
-        public void Create(Department Department)
-        {
-            using (IDbConnection db = new SqlConnection(connectionString))
-            {
-                var sqlQuery = "INSERT INTO Departments (Name) VALUES(@Name)";
-                db.Execute(sqlQuery, Department);
+                var sqlQuery = "INSERT INTO Skills (Name) VALUES(@Name)";
+                db.Execute(sqlQuery, Skill);
 
             }
         }
 
-        public void Update(Department Department)
+        public void Update(Skill Skill)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "UPDATE Departments SET Name = @Name WHERE Id = @Id";
-                db.Execute(sqlQuery, Department);
+                var sqlQuery = "UPDATE Skills SET Name = @Name WHERE Id = @Id";
+                db.Execute(sqlQuery, Skill);
             }
         }
 
@@ -68,17 +58,9 @@ namespace as_02.Repositories
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "DELETE FROM Staffs WHERE Department_id = @id;DELETE FROM Departments WHERE Id = @id";
+                var sqlQuery = "DELETE FROM Staffs WHERE Skill_id = @id;DELETE FROM Skills WHERE Id = @id";
                 db.Execute(sqlQuery, new { id });
             }
-        }
-        public List<dynamic> GetMidSalaries()
-        {
-            using (IDbConnection db = new SqlConnection(connectionString))
-            {
-                return db.Query<dynamic>("SELECT Department_id, AVG(Salary) AS MidSalary FROM Staffs GROUP BY Department_id").ToList();
-            }
-
         }
     }
 }

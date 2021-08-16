@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace as_02.Interfaces
 {
-    public interface IDepartmentRepository
+    public interface ISkillRepository
     {
-        void Create(Department department);
+        void Create(Skill skill);
         void DeleteById(int id);
-        Department GetById(int id);
-        List<Department> GetAllDepartments();
-        void Update(Department department);
-        dynamic GetAllStaffsWithDepartments();
-        List<dynamic> GetMidSalaries();
+        Skill GetById(int id);
+        List<Skill> GetAllSkills();
+        void Update(Skill skill);
     }
 }

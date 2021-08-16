@@ -1,0 +1,99 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using as_02.Models;
+using as_02.Interfaces;
+using as_02.Services;
+
+namespace as_02.Controllers
+{
+    [ApiController]
+    [Route("skills/[action]")]
+    public class SkillsController : ControllerBase
+    {
+        private readonly ISkillRepository _skillRepository;
+
+        public SkillsController(ISkillRepository skillRepository)
+        {
+            _skillRepository = skillRepository;
+        }
+        [HttpPost]
+        public IActionResult Create([FromBody]  Skill skill)
+        {
+            try
+            {
+                _skillRepository.Create(skill);
+                return Ok(skill);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut] 
+        public IActionResult Update([FromBody]  Skill skill)
+        {
+            try
+            {
+                _skillRepository.Update(skill);
+                return Ok(skill);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("{id}")]
+        public ActionResult Get(int id)
+        {
+            try 
+            {
+                Skill skill = _skillRepository.GetById(id);
+                if (skill == null)
+                {
+                    return Ok("Файл не найден");
+                }else {
+                    return Ok(skill);
+                }
+                
+            } 
+            catch 
+            {
+                return BadRequest();
+            } 
+        }
+        [HttpGet]
+        public ActionResult GetAll()
+        {
+            try
+            {
+                List<Skill> skills= _skillRepository.GetAllSkills();
+                return Ok(skills);
+
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                _skillRepository.DeleteById(id);
+                return Ok("Deleted");
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+    }
+    
+}
