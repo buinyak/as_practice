@@ -107,6 +107,19 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet("{id}")]
+        public IActionResult GetByDepartmentId(int id)
+        {
+            try
+            {
+
+                return Ok(_staffRepository.GetByDepartmentId(id));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
     }
     

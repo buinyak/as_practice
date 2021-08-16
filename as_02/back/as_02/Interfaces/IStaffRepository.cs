@@ -13,7 +13,7 @@ namespace as_02.Interfaces
         Staff GetById(int id);
         List<Staff> GetAllStaffs();
         void Update(Staff staff);
-        List<Staff> GetByDepartment(int id);
+        dynamic GetByDepartmentId(int id);
 
     }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="StaffsPage">
-    <div clas="newStaff">
+    <div class="newStaff">
       <div class="newItems">
         <div class="newItem">ID</div>
         <select v-model="newStaff.department_id" class="newItem">
@@ -11,6 +11,12 @@
         <input v-model="newStaff.salary" placeholder="Зарплата" class="newItem">
         <div @click="CreateStaff()" class="buttonAdd">Добавить</div>
       </div>
+    </div>
+    <div class="departmentSelector">
+      <select v-on:change="GetByDepartmentId($event.target.value)" class="depSelect">
+        <option value="" disabled selected>Отфильтровать по отделу</option>
+        <option v-for="dep in deps" :key="dep.id" :value="dep.id">{{ dep.name }}</option>
+      </select>
     </div>
     <div v-for="(staff,index) in staffs" v-bind:key="staff.id">
       <div v-if="isUpdateStaff!=staff" class="staffItems">
@@ -45,6 +51,7 @@ export default {
     return {
       staffs: [],
       deps: [],
+      selectedDep:'',
       newStaff: {
         department_id: '',
         fio: '',
@@ -60,14 +67,11 @@ export default {
 
   },
   methods: {
-    onChange: function (event) {
-      let index = event.target.selectedIndex // this selectedIndex is from event.
-      this.selectedIndex = index
-    },
     GetAllStaffsWithDepartments() {
       axios.get('https://localhost:44390/departments/GetAllStaffsWithDepartments'
       ).then(response => {
         this.staffs = response.data;
+        this.AllStaffs = response.data;
         console.log(response.data);
       }).catch((error) => {
         console.log(error);
@@ -77,6 +81,15 @@ export default {
       axios.get('https://localhost:44390/departments/GetAll'
       ).then(response => {
         this.deps = response.data;
+        console.log(response.data);
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
+    GetByDepartmentId(id) {
+      axios.get('https://localhost:44390/staffs/GetByDepartmentId/'+id
+      ).then(response => {
+        this.staffs = response.data;
         console.log(response.data);
       }).catch((error) => {
         console.log(error);
@@ -218,7 +231,29 @@ export default {
 
 }
 
-
+.departmentSelector{
+  display: flex;
+  text-align: center;
+  border-radius: 0;
+  border: 1px solid black;
+  margin-top: 10px;
+  height: 50px;
+  .depSelect{
+    margin-top: auto;
+    margin-bottom: auto;
+    border: 0;
+    font-size: 14pt;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+    margin-left: 2%;
+    padding: 0;
+    outline: none;
+    width: 100%;
+  }
+}
 .staffItems {
   display: flex;
   text-align: center;

@@ -66,11 +66,12 @@ namespace as_02.Repositories
             }
         }
 
-        public List<Staff> GetByDepartment(int id)
+        public dynamic GetByDepartmentId(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<Staff>("SELECT * FROM Staffs WHERE Id = @Id", new { id }).ToList();
+                return db.Query<Object>("SELECT DEP.id AS department_id, DEP.Name AS department_name, STAFF.id AS id, STAFF.Fio AS fio, STAFF.Salary AS salary " +
+                    "FROM Departments DEP INNER JOIN Staffs STAFF ON DEP.Id = STAFF.Department_id WHERE DEP.Id = @id", new { id }).ToList();
             }
         }
 
