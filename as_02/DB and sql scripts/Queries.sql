@@ -1,53 +1,25 @@
-DROP TABLE Staffs;
-DROP TABLE Departments;
-CREATE TABLE Departments (
+DROP TABLE Staffs_skills;
+DROP TABLE Skills;
+
+CREATE TABLE Skills (
   Id INT IDENTITY(1,1) PRIMARY KEY,
   Name VARCHAR(100)
 );
-CREATE TABLE Staffs (
+CREATE TABLE Staffs_skills (
     Id INT IDENTITY(1,1) PRIMARY KEY,
-    Department_id INT,
-    Fio VARCHAR(100),
-	Salary MONEY,
-	FOREIGN KEY (Department_id) REFERENCES Departments(id) ON DELETE CASCADE,
+    Staff_id INT,
+    Skill_id INT,
+	FOREIGN KEY (Staff_id) REFERENCES Staffs(id),
+	FOREIGN KEY (Skill_id) REFERENCES Skills(id),
 	
 );
 
-DECLARE @id int,
-		@name VARCHAR(100);
+DECLARE @id int;
 
-SET @name = 'HR';
-
-INSERT INTO Departments (name)
-    VALUES(@name);
-
-SET @id = (SELECT Departments.Id FROM Departments WHERE Departments.Name = @name);
-
-INSERT INTO Staffs (Department_id,Fio,	Salary)
-    VALUES
-	(@id,'Andrei Andreev Andrevich',1000),
-	(@id,'Kirill Andreev Andrevich',2000),
-	(@id,'Sergei Andreev Andrevich',3000)
-
-SET @name = 'Development';
-
-INSERT INTO Departments (name)
-    VALUES(@name);
-
-SET @id = (SELECT Departments.Id FROM Departments WHERE Departments.Name = @name);
-
-INSERT INTO Staffs (Department_id,Fio,	Salary)
-    VALUES
-	(@id,'Misha Andreev Andrevich',43131),
-	(@id,'Kolya Andreev Andrevich',2003410),
-	(@id,'Nikita Andreev Andrevich',41313);
+INSERT INTO Skills(name)
+    VALUES('Усидчивость'),('Целеустремленность'),('Скорость');
 
 
-SELECT TOP (1000) [Id]
-      ,[Name]
-	  FROM [AnReshProbation].[dbo].[Departments]
-SELECT TOP (100) [Id]
-      ,[Department_id]
-      ,[Fio]
-      ,[Salary]
-	  FROM [AnReshProbation].[dbo].[Staffs]
+SELECT * FROM Staffs_skills
+
+SELECT * FROM Skills

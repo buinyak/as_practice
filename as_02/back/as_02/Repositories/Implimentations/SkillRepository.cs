@@ -20,7 +20,7 @@ namespace as_02.Repositories
             _configuration = configuration;
             connectionString = _configuration["ConnectionString"];
         }
-        public List<Skill> GetAllSkills()
+        public List<Skill> GetAll()
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
@@ -28,37 +28,39 @@ namespace as_02.Repositories
             }
         }
 
-        public Skill GetById(int id)
+        public Skill Get(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 return db.Query<Skill>("SELECT * FROM Skills WHERE Id = @id", new { id }).FirstOrDefault();
             }
         }
-        public void Create(Skill Skill)
+        public Skill Create(Skill skill)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = "INSERT INTO Skills (Name) VALUES(@Name)";
-                db.Execute(sqlQuery, Skill);
+                db.Execute(sqlQuery, skill);
+                return skill;
 
             }
         }
 
-        public void Update(Skill Skill)
+        public Skill Update(Skill skill)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = "UPDATE Skills SET Name = @Name WHERE Id = @Id";
-                db.Execute(sqlQuery, Skill);
+                db.Execute(sqlQuery, skill);
+                return skill;
             }
         }
 
-        public void DeleteById(int id)
+        public void Delete(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "DELETE FROM Staffs WHERE Skill_id = @id;DELETE FROM Skills WHERE Id = @id";
+                var sqlQuery = "DELETE FROM Skills WHERE Id = @id";
                 db.Execute(sqlQuery, new { id });
             }
         }

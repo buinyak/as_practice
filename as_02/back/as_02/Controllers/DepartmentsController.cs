@@ -26,8 +26,7 @@ namespace as_02.Controllers
         {
             try
             {
-                _departmentRepository.Create(department);
-                return Ok(department);
+                return Ok(_departmentRepository.Create(department));
             }
             catch
             {
@@ -40,8 +39,7 @@ namespace as_02.Controllers
         {
             try
             {
-                _departmentRepository.Update(department);
-                return Ok(department);
+                return Ok(_departmentRepository.Update(department));
             }
             catch
             {
@@ -66,13 +64,7 @@ namespace as_02.Controllers
         {
             try 
             {
-                Department department = _departmentRepository.GetById(id);
-                if (department == null)
-                {
-                    return Ok("Файл не найден");
-                }else {
-                    return Ok(department);
-                }
+                return Ok(_departmentRepository.Get(id));
                 
             } 
             catch 
@@ -85,8 +77,7 @@ namespace as_02.Controllers
         {
             try
             {
-                List<Department> departments= _departmentRepository.GetAllDepartments();
-                return Ok(departments);
+                return Ok(_departmentRepository.GetAll());
 
             }
             catch
@@ -94,26 +85,13 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
-        [HttpGet]
-        public ActionResult GetAllStaffsWithDepartments()
-        {
-            try
-            {
-                var departments = _departmentRepository.GetAllStaffsWithDepartments();
-                return Ok(departments);
-
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
+        
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             try
             {
-                _departmentRepository.DeleteById(id);
+                _departmentRepository.Delete(id);
                 return Ok("Deleted");
             }
             catch

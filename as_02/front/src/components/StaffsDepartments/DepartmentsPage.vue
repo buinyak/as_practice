@@ -21,6 +21,7 @@
       <div v-if="isUpdateDep==dep" class="updateItems">
         <div class="updateItem">{{ dep.id }}</div>
         <input v-model="updateDep.name" placeholder="Название отдела" class="updateItem">
+        <div class="departmentItem">{{midSalaries[index].MidSalary}}</div>
         <div @click="UpdateDep();isUpdateDep=null;" class="buttonConfirm">Сохранить</div>
         <div @click="isUpdateDep=null" class="buttonBack">Отменить</div>
         <div class="updateItem"></div>
@@ -41,14 +42,13 @@ export default {
       departments: {},
       newDep: {},
       updateDep: {},
-      isUpdateDep: null,
-      midSalaries:'',
+      isUpdateDep: {},
+      midSalaries: {},
     }
   },
   beforeMount() {
     this.GetMidSalaries();
     this.GetAllDepartments();
-
   },
   methods: {
     GetAllDepartments() {
@@ -86,7 +86,6 @@ export default {
       axios.get('https://localhost:44390/departments/GetMidSalaries'
       ).then(response => {
         this.midSalaries = response.data;
-        console.log(response.data);
       }).catch((error) => {
         console.log(error);
       })

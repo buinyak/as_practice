@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 
 namespace as_02.Models
 {
-    public class Skill
+    public class StaffSkills
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
     }
 }

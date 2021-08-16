@@ -14,7 +14,7 @@
     </div>
     <div class="departmentSelector">
       <select v-on:change="GetByDepartmentId($event.target.value)" class="depSelect">
-        <option value="" disabled selected>Отфильтровать по отделу</option>
+        <option value="all">Все отделы</option>
         <option v-for="dep in deps" :key="dep.id" :value="dep.id">{{ dep.name }}</option>
       </select>
     </div>
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     GetAllStaffsWithDepartments() {
-      axios.get('https://localhost:44390/departments/GetAllStaffsWithDepartments'
+      axios.get('https://localhost:44390/staffs/GetAllStaffsWithDepartments'
       ).then(response => {
         this.staffs = response.data;
         this.AllStaffs = response.data;
@@ -87,6 +87,10 @@ export default {
       })
     },
     GetByDepartmentId(id) {
+      if(id == "all"){
+        this.GetAllStaffsWithDepartments();
+        return;
+      }
       axios.get('https://localhost:44390/staffs/GetByDepartmentId/'+id
       ).then(response => {
         this.staffs = response.data;
@@ -112,7 +116,7 @@ export default {
       this.newStaff.salary = parseInt(this.newStaff.salary);
       axios.post('https://localhost:44390/staffs/create', this.newStaff
       ).then(response => {
-        this.staffs.push(response.data);
+        this.GetByDepartmentId(response.data.department_id);
         console.log(response.data);
       }).catch((error) => {
         console.log(error);

@@ -53,7 +53,7 @@ namespace as_02.Controllers
         {
             try 
             {
-                Skill skill = _skillRepository.GetById(id);
+                Skill skill = _skillRepository.Get(id);
                 if (skill == null)
                 {
                     return Ok("Файл не найден");
@@ -72,7 +72,7 @@ namespace as_02.Controllers
         {
             try
             {
-                List<Skill> skills= _skillRepository.GetAllSkills();
+                List<Skill> skills= _skillRepository.GetAll();
                 return Ok(skills);
 
             }
@@ -86,7 +86,7 @@ namespace as_02.Controllers
         {
             try
             {
-                _skillRepository.DeleteById(id);
+                _skillRepository.Delete(id);
                 return Ok("Deleted");
             }
             catch

@@ -8,10 +8,10 @@ namespace as_02.Interfaces
 {
     public interface ISkillRepository
     {
-        void Create(Skill skill);
-        void DeleteById(int id);
-        Skill GetById(int id);
-        List<Skill> GetAllSkills();
-        void Update(Skill skill);
+        Skill Create(Skill skill);
+        void Delete(int id);
+        Skill Get(int id);
+        List<Skill> GetAll();
+        Skill Update(Skill skill);
     }
 }

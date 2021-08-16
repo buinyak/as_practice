@@ -20,7 +20,7 @@ namespace as_02.Repositories
             _configuration = configuration;
             connectionString = _configuration["ConnectionString"];
         }
-        public List<Department> GetAllDepartments()
+        public List<Department> GetAll()
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
@@ -28,47 +28,39 @@ namespace as_02.Repositories
             }
         }
 
-        public Department GetById(int id)
+        public Department Get(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 return db.Query<Department>("SELECT * FROM Departments WHERE Id = @id", new { id }).FirstOrDefault();
             }
         }
-        public dynamic GetAllStaffsWithDepartments()
-        {
-            using (IDbConnection db = new SqlConnection(connectionString))
-            {
-                var deps = db.Query<Object>(
-                    "SELECT DEP.id AS department_id,DEP.Name AS department_name,STAFF.id AS id,STAFF.Fio AS fio,STAFF.Salary AS salary " +
-                    "FROM Departments DEP INNER JOIN Staffs STAFF ON DEP.Id = STAFF.Department_id");
-                return deps;
-            }
-        }
-        public void Create(Department Department)
+        public Department Create(Department department)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = "INSERT INTO Departments (Name) VALUES(@Name)";
-                db.Execute(sqlQuery, Department);
+                db.Execute(sqlQuery, department);
+                return department;
 
             }
         }
 
-        public void Update(Department Department)
+        public Department Update(Department department)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = "UPDATE Departments SET Name = @Name WHERE Id = @Id";
-                db.Execute(sqlQuery, Department);
+                db.Execute(sqlQuery, department);
+                return department;
             }
         }
 
-        public void DeleteById(int id)
+        public void Delete(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "DELETE FROM Staffs WHERE Department_id = @id;DELETE FROM Departments WHERE Id = @id";
+                var sqlQuery = "DELETE FROM Departments WHERE Id = @id";
                 db.Execute(sqlQuery, new { id });
             }
         }

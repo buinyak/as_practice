@@ -21,7 +21,7 @@ namespace as_02.Repositories
             _configuration = configuration;
             connectionString = _configuration["ConnectionString"];
         }
-        public List<Staff> GetAllStaffs()
+        public List<Staff> GetAll()
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
@@ -29,7 +29,7 @@ namespace as_02.Repositories
             }
         }
 
-        public Staff GetById(int id)
+        public Staff Get(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
@@ -48,16 +48,17 @@ namespace as_02.Repositories
             }
         }
 
-        public void Update(Staff Staff)
+        public Staff Update(Staff staff)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = "UPDATE Staffs SET Department_id = @Department_id, Fio = @Fio, Salary = @Salary WHERE Id = @Id";
-                db.Execute(sqlQuery, Staff);
+                db.Execute(sqlQuery, staff);
+                return staff;
             }
         }
 
-        public void DeleteById(int id)
+        public void Delete(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
@@ -65,13 +66,22 @@ namespace as_02.Repositories
                 db.Execute(sqlQuery, new { id });
             }
         }
-
-        public dynamic GetByDepartmentId(int id)
+        public dynamic GetAllByDepartmentId(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 return db.Query<Object>("SELECT DEP.id AS department_id, DEP.Name AS department_name, STAFF.id AS id, STAFF.Fio AS fio, STAFF.Salary AS salary " +
                     "FROM Departments DEP INNER JOIN Staffs STAFF ON DEP.Id = STAFF.Department_id WHERE DEP.Id = @id", new { id }).ToList();
+            }
+        }
+        public dynamic GetAllWithDepartments()
+        {
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {
+                var deps = db.Query<Object>(
+                    "SELECT DEP.id AS department_id,DEP.Name AS department_name,STAFF.id AS id,STAFF.Fio AS fio,STAFF.Salary AS salary " +
+                    "FROM Departments DEP INNER JOIN Staffs STAFF ON DEP.Id = STAFF.Department_id");
+                return deps;
             }
         }
 

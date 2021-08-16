@@ -26,8 +26,8 @@ namespace as_02.Controllers
         {
             try
             {
-                _staffRepository.Create(staff);
-                return Ok("Add");
+                ;
+                return Ok(_staffRepository.Create(staff));
             }
             catch
             {
@@ -39,8 +39,8 @@ namespace as_02.Controllers
         {
             try
             {
-                _staffRepository.Update(staff);
-                return Ok(staff);
+                
+                return Ok(_staffRepository.Update(staff));
             }
             catch
             {
@@ -52,13 +52,7 @@ namespace as_02.Controllers
         {
             try 
             {
-                Staff staff = _staffRepository.GetById(id);
-                if (staff == null)
-                {
-                    return Ok("Файл не найден");
-                }else {
-                    return Ok(staff);
-                }
+                return Ok(_staffRepository.Get(id));
                 
             } 
             catch 
@@ -71,8 +65,7 @@ namespace as_02.Controllers
         {
             try
             {
-                List<Staff> staffs= _staffRepository.GetAllStaffs();
-                return Ok(staffs);
+                return Ok(_staffRepository.GetAll());
 
             }
             catch
@@ -85,8 +78,7 @@ namespace as_02.Controllers
         {
             try
             {
-                List<Staff> staffs = _staffRepository.GetAllStaffs();
-                return Ok(staffs);
+                return Ok(_staffRepository.GetAll());
 
             }
             catch
@@ -99,7 +91,7 @@ namespace as_02.Controllers
         {
             try
             {
-                _staffRepository.DeleteById(id);
+                _staffRepository.Delete(id);
                 return Ok("Deleted");
             }
             catch
@@ -113,7 +105,20 @@ namespace as_02.Controllers
             try
             {
 
-                return Ok(_staffRepository.GetByDepartmentId(id));
+                return Ok(_staffRepository.GetAllByDepartmentId(id));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet]
+        public ActionResult GetAllStaffsWithDepartments()
+        {
+            try
+            {
+                return Ok(_staffRepository.GetAllWithDepartments());
+
             }
             catch
             {

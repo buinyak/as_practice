@@ -5,13 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Configuration\" />
-    <Folder Include="Services\" />
+    <PackageReference Include="Dapper" Version="2.0.90" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.90" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <Folder Include="Services\Implimentations\" />
+    <Folder Include="Services\Interfaces\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
