@@ -93,31 +93,32 @@ namespace as_02.Repositories
                 "LEFT JOIN Skills SK ON SS.Skill_id = SK.Id";
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                Dictionary<int,Department> deps = new Dictionary<int,Department>();
-                return db.Query<Department, Staff, Skill,Department>(sql,
+                Dictionary<int, Department> deps = new Dictionary<int, Department>();
+                //Dictionary<int,Department> deps = new Dictionary<int,Department>();
+                return db.Query<Department, Staff, Skill, Department>(sql,
                     (d, s, sk) =>
                     {
 
                         Department department;
 
-                        if (!deps.TryGetValue(d.Id, out department)) 
-                        { 
+                        if (!deps.TryGetValue(d.Id, out department))
+                        {
                             department = d;
                             department.Staffs = new Dictionary<int, Staff>();
                             deps.Add(d.Id, department);
                         }
                         Staff staff;
-                        if (!department.Staffs.TryGetValue(s.Id,out staff))
+                        if (!department.Staffs.TryGetValue(s.Id, out staff))
                         {
                             staff = s;
-                            staff.Skills = new Dictionary<int, Skill>();
+                            staff.Skills = new List<Skill>();
                             department.Staffs.Add(s.Id, staff);
                         }
-                        if(sk != null)
+                        if (sk != null)
                         {
-                            staff.Skills.Add(sk.Id, sk);
+                            staff.Skills.Add(sk);
                         }
-                        
+
                         return department;
                     }).Distinct().ToList();
             }
