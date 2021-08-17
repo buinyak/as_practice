@@ -9,6 +9,6 @@ namespace as_02.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public virtual IEnumerable<Department> Departments { get; set; }
+        public virtual Dictionary<int,Staff> Staffs { get; set; }
     }
 }

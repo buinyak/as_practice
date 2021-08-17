@@ -86,6 +86,17 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet]
+        public ActionResult GetAllWithDepartmentsAndSkills()
+        {
+            try {
+                return Ok(_staffRepository.GetAllWithDepartmentsAndSkills());
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

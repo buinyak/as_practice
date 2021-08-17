@@ -84,6 +84,43 @@ namespace as_02.Repositories
                 return deps;
             }
         }
+        public List<Department> GetAllWithDepartmentsAndSkills()
+        {
+            string sql = "SELECT DEP.id, DEP.Name, S.id, S.Fio, S.Salary, SK.Id, SK.Name " +
+                "FROM Departments DEP " +
+                "LEFT JOIN Staffs S ON DEP.Id = S.Department_id " +
+                "LEFT JOIN Staffs_skills SS ON S.id = SS.Staff_id " +
+                "LEFT JOIN Skills SK ON SS.Skill_id = SK.Id";
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {
+                Dictionary<int,Department> deps = new Dictionary<int,Department>();
+                return db.Query<Department, Staff, Skill,Department>(sql,
+                    (d, s, sk) =>
+                    {
 
+                        Department department;
+
+                        if (!deps.TryGetValue(d.Id, out department)) 
+                        { 
+                            department = d;
+                            department.Staffs = new Dictionary<int, Staff>();
+                            deps.Add(d.Id, department);
+                        }
+                        Staff staff;
+                        if (!department.Staffs.TryGetValue(s.Id,out staff))
+                        {
+                            staff = s;
+                            staff.Skills = new Dictionary<int, Skill>();
+                            department.Staffs.Add(s.Id, staff);
+                        }
+                        if(sk != null)
+                        {
+                            staff.Skills.Add(sk.Id, sk);
+                        }
+                        
+                        return department;
+                    }).Distinct().ToList();
+            }
+        }
     }
 }

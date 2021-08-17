@@ -12,7 +12,7 @@ namespace as_02.Models
         public string Fio { get; set; }
         public float Salary { get; set; }
 
-        public virtual IEnumerable<Skill> Skills { get; set; }
+        public virtual Dictionary<int ,Skill> Skills { get; set; }
 
     }
 }

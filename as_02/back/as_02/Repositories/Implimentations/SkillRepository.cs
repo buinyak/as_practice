@@ -64,5 +64,6 @@ namespace as_02.Repositories
                 db.Execute(sqlQuery, new { id });
             }
         }
+
     }
 }
