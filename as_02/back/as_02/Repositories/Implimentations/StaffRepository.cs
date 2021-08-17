@@ -84,7 +84,7 @@ namespace as_02.Repositories
                 return deps;
             }
         }
-        public List<Department> GetAllWithDepartmentsAndSkills()
+        public ICollection<Department> GetAllWithDepartmentsAndSkills()
         {
             string sql = "SELECT DEP.id, DEP.Name, S.id, S.Fio, S.Salary, SK.Id, SK.Name " +
                 "FROM Departments DEP " +
@@ -93,26 +93,27 @@ namespace as_02.Repositories
                 "LEFT JOIN Skills SK ON SS.Skill_id = SK.Id";
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                Dictionary<int, Department> deps = new Dictionary<int, Department>();
-                //Dictionary<int,Department> deps = new Dictionary<int,Department>();
+                var deps = new Dictionary<int, Department>();
+                var staffs = new Dictionary<int, Staff>();
                 return db.Query<Department, Staff, Skill, Department>(sql,
                     (d, s, sk) =>
                     {
 
-                        Department department;
 
-                        if (!deps.TryGetValue(d.Id, out department))
+                        if (!deps.TryGetValue(d.Id, out Department department))
                         {
                             department = d;
-                            department.Staffs = new Dictionary<int, Staff>();
+                            department.Staffs = new List<Staff>();
                             deps.Add(d.Id, department);
+                            staffs.Clear();
                         }
-                        Staff staff;
-                        if (!department.Staffs.TryGetValue(s.Id, out staff))
+
+                        if (!staffs.TryGetValue(s.Id, out Staff staff))
                         {
                             staff = s;
                             staff.Skills = new List<Skill>();
-                            department.Staffs.Add(s.Id, staff);
+                            staffs.Add(s.Id, staff);
+                            department.Staffs.Add(staff);
                         }
                         if (sk != null)
                         {

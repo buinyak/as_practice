@@ -28,6 +28,8 @@ namespace as_02
 
             services.AddTransient<IStaffRepository, StaffRepository>();
             services.AddTransient<IDepartmentRepository, DepartmentRepository>();
+            services.AddTransient<ISkillRepository, SkillRepository>();
+            services.AddTransient<IStaffSkillsRepository, StaffSkillsRepository>();
 
             services.AddControllers();
 
