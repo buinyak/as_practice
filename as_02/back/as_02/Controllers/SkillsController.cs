@@ -26,8 +26,7 @@ namespace as_02.Controllers
         {
             try
             {
-                _skillRepository.Create(skill);
-                return Ok(skill);
+                return Ok(_skillRepository.Create(skill));
             }
             catch
             {
@@ -40,8 +39,8 @@ namespace as_02.Controllers
         {
             try
             {
-                _skillRepository.Update(skill);
-                return Ok(skill);
+                
+                return Ok(_skillRepository.Update(skill));
             }
             catch
             {
@@ -53,14 +52,8 @@ namespace as_02.Controllers
         {
             try 
             {
-                Skill skill = _skillRepository.Get(id);
-                if (skill == null)
-                {
-                    return Ok("Файл не найден");
-                }else {
-                    return Ok(skill);
-                }
-                
+
+                return Ok(_skillRepository.Get(id));             
             } 
             catch 
             {
@@ -72,8 +65,7 @@ namespace as_02.Controllers
         {
             try
             {
-                List<Skill> skills= _skillRepository.GetAll();
-                return Ok(skills);
+                return Ok(_skillRepository.GetAll());
 
             }
             catch

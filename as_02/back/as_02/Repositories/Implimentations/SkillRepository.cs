@@ -39,8 +39,8 @@ namespace as_02.Repositories
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "INSERT INTO Skills (Name) VALUES(@Name)";
-                db.Execute(sqlQuery, skill);
+                string sqlQuery = "INSERT INTO Skills (Name) VALUES(@Name); SELECT CAST(SCOPE_IDENTITY() as int)";
+                skill.Id = db.Query<int>(sqlQuery, skill).FirstOrDefault();
                 return skill;
 
             }
