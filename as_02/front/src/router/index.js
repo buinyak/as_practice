@@ -10,7 +10,7 @@ export default new VueRouter({
     routes:[
         {
             path:'/',
-            component:FilesNavigate
+            component:StaffsPage
         },
         {
             path:'/engFiles',

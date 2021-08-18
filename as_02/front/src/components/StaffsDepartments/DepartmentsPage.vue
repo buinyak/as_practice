@@ -63,7 +63,7 @@ export default {
     DeleteDep(dep, index) {
       axios.delete('https://localhost:44390/departments/delete/' + dep.id
       ).then(response => {
-        this.departments.splice(index);
+        this.departments.splice(index,1);
         console.log(response.data);
       }).catch((error) => {
         console.log(error);

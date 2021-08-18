@@ -56,7 +56,7 @@ name: "SkillsPage",
     DeleteSkill(skill, index) {
       axios.delete('https://localhost:44390/skills/delete/' + skill.id
       ).then(response => {
-        this.skills.splice(index);
+        this.skills.splice(index,1);
         console.log(response.data);
       }).catch((error) => {
         console.log(error);
@@ -75,6 +75,7 @@ name: "SkillsPage",
         console.log(error);
       })
     },
+
     UpdateSkill() {
       console.log(this.updateSkill);
       if (!this.updateSkill.name) {

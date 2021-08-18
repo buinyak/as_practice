@@ -13,8 +13,8 @@
       </div>
     </div>
     <div class="departmentSelector">
-      <select v-on:change="GetByDepartmentId($event.target.value)" class="depSelect">
-        <option value="all">Все отделы</option>
+      <select v-on:change="GetByDepartmentId($event.target.value)" v-model="selectedDepId" class="depSelect">
+        <option value="" selected>Все отделы</option>
         <option v-for="dep in deps" :key="dep.id" :value="dep.id">{{ dep.name }}</option>
       </select>
     </div>
@@ -51,7 +51,7 @@ export default {
     return {
       staffs: [],
       deps: [],
-      selectedDep:'',
+      selectedDepId:'',
       newStaff: {
         department_id: '',
         fio: '',
@@ -71,7 +71,6 @@ export default {
       axios.get('https://localhost:44390/staffs/GetAllStaffsWithDepartments'
       ).then(response => {
         this.staffs = response.data;
-        this.AllStaffs = response.data;
         console.log(response.data);
       }).catch((error) => {
         console.log(error);
@@ -87,7 +86,7 @@ export default {
       })
     },
     GetByDepartmentId(id) {
-      if(id == "all"){
+      if(id == ""){
         this.GetAllStaffsWithDepartments();
         return;
       }
@@ -102,7 +101,7 @@ export default {
     DeleteStaff(staff, index) {
       axios.delete('https://localhost:44390/staffs/delete/' + staff.id
       ).then(response => {
-        this.staffs.splice(index);
+        this.staffs.splice(index,1);
         console.log(response.data);
       }).catch((error) => {
         console.log(error);
@@ -116,7 +115,14 @@ export default {
       this.newStaff.salary = parseInt(this.newStaff.salary);
       axios.post('https://localhost:44390/staffs/create', this.newStaff
       ).then(response => {
-        this.GetByDepartmentId(response.data.department_id);
+        this.deps.forEach(function(dep){
+          if(dep.id == response.data.department_id){
+            response.data.department_name = dep.name;
+          }
+        })
+        if(this.selectedDepId == response.data.department_id || this.selectedDepId == "" ){
+          this.staffs.push(response.data);
+        }
         console.log(response.data);
       }).catch((error) => {
         console.log(error);
@@ -150,7 +156,7 @@ export default {
   width: 900px;
   font-size: 14pt;
 
-  .updateItems, .newItems {
+  .updateItems, .newItems,.staffItems,.departmentSelector {
     display: flex;
     text-align: center;
     border-radius: 0;
@@ -158,25 +164,7 @@ export default {
     margin-top: 10px;
     height: 50px;
 
-    .buttonAdd {
-      margin: auto;
-      cursor: pointer;
-      width: 20%;
-      box-sizing: border-box;
-      border-radius: 0;
-      border: 1px solid black;
-      height: 50%;
-      background-color: white;
-      text-align: center;
-      vertical-align: middle;
-
-      &:hover {
-        background-color: #b9b9b9;
-      }
-
-    }
-
-    .buttonConfirm, .buttonBack {
+    .buttonConfirm, .buttonBack,.buttonUpdate, .buttonDelete,.buttonAdd {
       margin: auto;
       cursor: pointer;
       width: 13%;
@@ -191,12 +179,15 @@ export default {
       &:hover {
         background-color: #b9b9b9;
       }
-    }
 
-    .updateItem, .newItem {
+    }
+    .buttonAdd {
+      width: 20%;
+    }
+    .updateItem, .newItem,.staffItem {
       margin-top: auto;
       margin-bottom: auto;
-      border-bottom: 1px solid black;
+      border-bottom: 0;
       border-top: 0;
       border-left: 0;
       border-right: 0;
@@ -211,107 +202,46 @@ export default {
     }
 
     :first-child {
-      border-bottom: 0;
       width: 4.5%;
       margin-left: 3%;
     }
-
     :nth-child(2) {
 
       width: 18%;
     }
-
     :nth-child(3) {
       margin-left: 2.5%;
       width: 27%;
       margin-right: 3%;
     }
-
     :nth-child(4) {
       width: 9%;
       margin-right: 3%;
     }
-  }
-
-}
-
-.departmentSelector{
-  display: flex;
-  text-align: center;
-  border-radius: 0;
-  border: 1px solid black;
-  margin-top: 10px;
-  height: 50px;
-  .depSelect{
-    margin-top: auto;
-    margin-bottom: auto;
-    border: 0;
-    font-size: 14pt;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    box-sizing: border-box;
-    margin-left: 2%;
-    padding: 0;
-    outline: none;
-    width: 100%;
-  }
-}
-.staffItems {
-  display: flex;
-  text-align: center;
-  border-radius: 0;
-  border: 1px solid black;
-  margin-top: 10px;
-
-
-  .buttonUpdate, .buttonDelete {
-    margin: auto;
-    height: 100%;
-    cursor: pointer;
-    width: 13%;
-    box-sizing: border-box;
-    border-radius: 0;
-    border: 1px solid black;
-    height: 50%;
-    background-color: white;
-    text-align: center;
-    vertical-align: middle;
-
-    &:hover {
-      background-color: #b9b9b9;
+    .newItem:nth-child(2),.newItem:nth-child(3),.newItem:nth-child(4), .updateItem:nth-child(2),.updateItem:nth-child(3),.updateItem:nth-child(4) {
+      border-bottom: 1px solid black;
+    }
+    .depSelect{
+      margin-top: auto;
+      margin-bottom: auto;
+      border: 0;
+      font-size: 14pt;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-sizing: border-box;
+      margin-left: 2%;
+      padding: 0;
+      outline: none;
+      width: 100%;
     }
 
   }
 
-
-  .staffItem {
-    height: 50px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: left;
-    text-align: left;
-
-  }
-
-  :first-child {
-    width: 5%;
-    margin-left: 3%;
-  }
-
-  :nth-child(2) {
-    width: 20%;
-  }
-
-  :nth-child(3) {
-    width: 30%;
-  }
-
-  :nth-child(4) {
-    width: 12%;
-  }
 }
+
+
 
 
 </style>
