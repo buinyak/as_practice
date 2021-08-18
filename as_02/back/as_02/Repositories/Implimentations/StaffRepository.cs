@@ -21,7 +21,7 @@ namespace as_02.Repositories
             _configuration = configuration;
             connectionString = _configuration["ConnectionString"];
         }
-        public List<Staff> GetAllStaffs()
+        public List<Staff> GetAll()
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
@@ -29,7 +29,7 @@ namespace as_02.Repositories
             }
         }
 
-        public Staff GetById(int id)
+        public Staff Get(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
@@ -48,16 +48,17 @@ namespace as_02.Repositories
             }
         }
 
-        public void Update(Staff Staff)
+        public Staff Update(Staff staff)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = "UPDATE Staffs SET Department_id = @Department_id, Fio = @Fio, Salary = @Salary WHERE Id = @Id";
-                db.Execute(sqlQuery, Staff);
+                db.Execute(sqlQuery, staff);
+                return staff;
             }
         }
 
-        public void DeleteById(int id)
+        public void Delete(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
@@ -65,15 +66,45 @@ namespace as_02.Repositories
                 db.Execute(sqlQuery, new { id });
             }
         }
-
-        public dynamic GetByDepartmentId(int id)
+        public ICollection<Department> GetAllByDepartmentsWithSkills()
         {
+            string sql = "SELECT DEP.id, DEP.Name, S.id, S.Department_id, S.Fio, S.Salary, SK.Id, SK.Name " +
+                "FROM Departments DEP " +
+                "LEFT JOIN Staffs S ON DEP.Id = S.Department_id " +
+                "LEFT JOIN Staffs_skills SS ON S.id = SS.Staff_id " +
+                "LEFT JOIN Skills SK ON SS.Skill_id = SK.Id";
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<Object>("SELECT DEP.id AS department_id, DEP.Name AS department_name, STAFF.id AS id, STAFF.Fio AS fio, STAFF.Salary AS salary " +
-                    "FROM Departments DEP INNER JOIN Staffs STAFF ON DEP.Id = STAFF.Department_id WHERE DEP.Id = @id", new { id }).ToList();
+                var deps = new Dictionary<int, Department>();
+                var staffs = new Dictionary<int, Staff>();
+                return db.Query<Department, Staff, Skill, Department>(sql,
+                    (d, s, sk) =>
+                    {
+
+
+                        if (!deps.TryGetValue(d.Id, out Department department))
+                        {
+                            department = d;
+                            department.Staffs = new List<Staff>();
+                            deps.Add(d.Id, department);
+                            staffs.Clear();
+                        }
+
+                        if (!staffs.TryGetValue(s.Id, out Staff staff))
+                        {
+                            staff = s;
+                            staff.Skills = new List<Skill>();
+                            staffs.Add(s.Id, staff);
+                            department.Staffs.Add(staff);
+                        }
+                        if (sk != null)
+                        {
+                            staff.Skills.Add(sk);
+                        }
+
+                        return department;
+                    }).Distinct().ToList();
             }
         }
-
     }
 }

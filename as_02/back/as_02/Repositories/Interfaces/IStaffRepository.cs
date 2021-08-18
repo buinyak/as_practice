@@ -9,11 +9,10 @@ namespace as_02.Interfaces
     public interface IStaffRepository
     {
         Staff Create(Staff staff);
-        void DeleteById(int id);
-        Staff GetById(int id);
-        List<Staff> GetAllStaffs();
-        void Update(Staff staff);
-        dynamic GetByDepartmentId(int id);
-
+        void Delete(int id);
+        Staff Get(int id);
+        List<Staff> GetAll();
+        Staff Update(Staff staff);
+        public ICollection<Department> GetAllByDepartmentsWithSkills();
     }
 }

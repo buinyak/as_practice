@@ -12,21 +12,21 @@ using as_02.Services;
 namespace as_02.Controllers
 {
     [ApiController]
-    [Route("departments/[action]")]
-    public class DepartmentsController : ControllerBase
+    [Route("skills/[action]")]
+    public class SkillsController : ControllerBase
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly ISkillRepository _skillRepository;
 
-        public DepartmentsController(IDepartmentRepository departmentRepository)
+        public SkillsController(ISkillRepository skillRepository)
         {
-            _departmentRepository = departmentRepository;
+            _skillRepository = skillRepository;
         }
         [HttpPost]
-        public IActionResult Create([FromBody]  Department department)
+        public IActionResult Create([FromBody]  Skill skill)
         {
             try
             {
-                return Ok(_departmentRepository.Create(department));
+                return Ok(_skillRepository.Create(skill));
             }
             catch
             {
@@ -35,24 +35,12 @@ namespace as_02.Controllers
         }
 
         [HttpPut] 
-        public IActionResult Update([FromBody]  Department department)
+        public IActionResult Update([FromBody]  Skill skill)
         {
             try
             {
-                return Ok(_departmentRepository.Update(department));
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-        [HttpGet]
-        public IActionResult GetMidSalaries()
-        {
-            try
-            {
-
-                return Ok(_departmentRepository.GetMidSalaries());
+                
+                return Ok(_skillRepository.Update(skill));
             }
             catch
             {
@@ -64,8 +52,8 @@ namespace as_02.Controllers
         {
             try 
             {
-                return Ok(_departmentRepository.Get(id));
-                
+
+                return Ok(_skillRepository.Get(id));             
             } 
             catch 
             {
@@ -77,7 +65,7 @@ namespace as_02.Controllers
         {
             try
             {
-                return Ok(_departmentRepository.GetAll());
+                return Ok(_skillRepository.GetAll());
 
             }
             catch
@@ -85,13 +73,12 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
-        
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             try
             {
-                _departmentRepository.Delete(id);
+                _skillRepository.Delete(id);
                 return Ok("Deleted");
             }
             catch

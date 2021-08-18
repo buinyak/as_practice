@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using as_02.Models;
 using as_02.Interfaces;
 using as_02.Services;
+using as_02.Services.Interfaces;
 
 namespace as_02.Controllers
 {
@@ -16,18 +17,48 @@ namespace as_02.Controllers
     public class StaffsController : ControllerBase
     {
         private readonly IStaffRepository _staffRepository;
+        private readonly IStaffService _staffService;
 
-        public StaffsController(IStaffRepository staffRepository)
+        public StaffsController(IStaffRepository staffRepository,IStaffService staffService)
         {
             _staffRepository = staffRepository;
+            _staffService = staffService;
         }
         [HttpPost]
         public IActionResult Create([FromBody]  Staff staff)
         {
             try
             {
-                _staffRepository.Create(staff);
-                return Ok("Add");
+                ;
+                return Ok(_staffRepository.Create(staff));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        
+        [HttpPost]
+        public IActionResult CreateWithSkills([FromBody]  Staff staff)
+        {
+            try
+            {
+                
+                return Ok(_staffService.CreateWithSkills(staff));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut]
+        public IActionResult UpdateWithSkills([FromBody]  Staff staff)
+        {
+            try
+            {
+
+                return Ok(_staffService.UpdateWithSkills(staff));
             }
             catch
             {
@@ -39,8 +70,8 @@ namespace as_02.Controllers
         {
             try
             {
-                _staffRepository.Update(staff);
-                return Ok(staff);
+                
+                return Ok(_staffRepository.Update(staff));
             }
             catch
             {
@@ -52,13 +83,7 @@ namespace as_02.Controllers
         {
             try 
             {
-                Staff staff = _staffRepository.GetById(id);
-                if (staff == null)
-                {
-                    return Ok("Файл не найден");
-                }else {
-                    return Ok(staff);
-                }
+                return Ok(_staffRepository.Get(id));
                 
             } 
             catch 
@@ -71,8 +96,7 @@ namespace as_02.Controllers
         {
             try
             {
-                List<Staff> staffs= _staffRepository.GetAllStaffs();
-                return Ok(staffs);
+                return Ok(_staffRepository.GetAll());
 
             }
             catch
@@ -85,8 +109,7 @@ namespace as_02.Controllers
         {
             try
             {
-                List<Staff> staffs = _staffRepository.GetAllStaffs();
-                return Ok(staffs);
+                return Ok(_staffRepository.GetAll());
 
             }
             catch
@@ -99,7 +122,7 @@ namespace as_02.Controllers
         {
             try
             {
-                _staffRepository.DeleteById(id);
+                _staffRepository.Delete(id);
                 return Ok("Deleted");
             }
             catch
@@ -107,13 +130,14 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
-        [HttpGet("{id}")]
-        public IActionResult GetByDepartmentId(int id)
+
+        [HttpGet]
+        public ActionResult GetAllByDepartmentsWithSkills()
         {
             try
             {
+                return Ok(_staffRepository.GetAllByDepartmentsWithSkills());
 
-                return Ok(_staffRepository.GetByDepartmentId(id));
             }
             catch
             {

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using as_02.Interfaces;
 using as_02.Repositories;
 using as_02.Services;
+using as_02.Services.Implimentations;
+using as_02.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,7 +30,9 @@ namespace as_02
 
             services.AddTransient<IStaffRepository, StaffRepository>();
             services.AddTransient<IDepartmentRepository, DepartmentRepository>();
-
+            services.AddTransient<ISkillRepository, SkillRepository>();
+            services.AddTransient<IStaffSkillRepository, StaffSkillRepository>();
+            services.AddTransient<IStaffService, StaffService>();
             services.AddControllers();
 
             services.AddSingleton<ITxtFileRepository, TxtFileRepository>();

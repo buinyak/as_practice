@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace as_02.Models
 {
-    public class Department
+    public class StaffSkill
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public virtual List<Staff> Staffs { get; set; }
+        public int Staff_id { get; set; }
+        public int Skill_id { get; set; }
     }
 }
