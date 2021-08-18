@@ -68,7 +68,7 @@ namespace as_02.Repositories
         }
         public ICollection<Department> GetAllByDepartmentsWithSkills()
         {
-            string sql = "SELECT DEP.id, DEP.Name, S.id, S.Fio, S.Salary, SK.Id, SK.Name " +
+            string sql = "SELECT DEP.id, DEP.Name, S.id, S.Department_id, S.Fio, S.Salary, SK.Id, SK.Name " +
                 "FROM Departments DEP " +
                 "LEFT JOIN Staffs S ON DEP.Id = S.Department_id " +
                 "LEFT JOIN Staffs_skills SS ON S.id = SS.Staff_id " +

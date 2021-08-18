@@ -10,8 +10,11 @@
         <input v-model="newStaff.fio" placeholder="ФИО" class="newItem">
         <input v-model="newStaff.salary" placeholder="Зарплата" class="newItem">
       </div>
-      <multiselect select-label="" v-model="newStaff.skills" :options="skills" :multiple="true" :close-on-select="false" :clear-on-select="false" placeholder="Выберите умения" label="name" track-by="name">
-        <template slot="selection" slot-scope="{ isOpen }"><span class="multiselect__single" v-if="newStaff.skills.length &amp;&amp; !isOpen">Умения</span></template>
+      <multiselect select-label="" v-model="newStaff.skills" :options="skills" :multiple="true" :close-on-select="false"
+                   :clear-on-select="false" placeholder="Выберите умения" label="name" track-by="name">
+        <template slot="selection" slot-scope="{ isOpen }"><span class="multiselect__single"
+                                                                 v-if="newStaff.skills.length &amp;&amp; !isOpen">Умения</span>
+        </template>
       </multiselect>
       <div @click="CreateWithSkills()" class="buttonAdd">Добавить</div>
     </div>
@@ -23,15 +26,19 @@
       </select>
     </div>
     <div v-for="dep in this.visualDeps" :key="dep.id">
-      <div v-for="(staff,index) in dep.staffs" v-bind:key="staff.id" class="kkk">
+      <div v-for="(staff,index) in dep.staffs" v-bind:key="staff.id" class="staff">
         <div v-if="isUpdateStaff!=staff" class="staffItems">
           <div class="staffItem">{{ staff.id }}</div>
           <div class="staffItem">{{ dep.name }}</div>
           <div class="staffItem">{{ staff.fio }}</div>
           <div class="staffItem">{{ staff.salary }}</div>
         </div>
-        <div v-if="isUpdateStaff!=staff" class="skillsList"></div>
-        <div v-if="isUpdateStaff!=staff" @click="isUpdateStaff=staff;updateStaff = staff;" class="buttonUpdate">Изменить</div>
+        <div v-if="isUpdateStaff!=staff" class="skillsList">
+          <span  v-for="skill in staff.skills" :key="skill.id">{{skill.name + " "}}</span>
+        </div>
+        <div v-if="isUpdateStaff!=staff" @click="isUpdateStaff=staff;updateStaff = staff;" class="buttonUpdate">
+          Изменить
+        </div>
         <div v-if="isUpdateStaff!=staff" class="buttonDelete" @click="DeleteStaff(staff,index)">Удалить</div>
         <div v-if="isUpdateStaff==staff" class="updateItems">
           <div class="updateItem">{{ staff.id }}</div>
@@ -42,10 +49,17 @@
           <input v-model="updateStaff.fio" placeholder="ФИО" class="updateItem">
           <input v-model="updateStaff.salary" placeholder="Зарплата" class="updateItem">
         </div>
-        <multiselect v-if="isUpdateStaff==staff" v-model="staff.skills" :options="skills" :multiple="true" :close-on-select="false" :clear-on-select="false" placeholder="Выберите умения" label="name" track-by="name">
-          <template slot="selection" slot-scope="{ isOpen }"><span class="multiselect__single" v-if="staff.skills.length &amp;&amp; !isOpen">{{ staff.skills.length }} options</span></template>
+        <multiselect v-if="isUpdateStaff==staff" v-model="staff.skills" :options="skills" :multiple="true"
+                     :close-on-select="false" :clear-on-select="false" placeholder="Выберите умения" label="name"
+                     track-by="name">
+          <template slot="selection" slot-scope="{ isOpen }"><span class="multiselect__single"
+                                                                   v-if="staff.skills.length &amp;&amp; !isOpen">{{
+              staff.skills.length
+            }} options</span></template>
         </multiselect>
-        <div v-if="isUpdateStaff==staff" @click="UpdateStaffWithSkills();isUpdateStaff=null;" class="buttonConfirm">Сохранить</div>
+        <div v-if="isUpdateStaff==staff" @click="UpdateStaffWithSkills();isUpdateStaff=null;" class="buttonConfirm">
+          Сохранить
+        </div>
         <div v-if="isUpdateStaff==staff" @click="isUpdateStaff=null" class="buttonBack">Отменить</div>
       </div>
     </div>
@@ -77,13 +91,13 @@ export default {
       allDepsStaffs: [],
       visualDeps: [],
       deps: [],
-      skills:[],
+      skills: [],
       selectedDepId: '',
       newStaff: {
         department_id: '',
         fio: '',
         salary: '',
-        skills:[]
+        skills: []
       },
       isUpdateStaff: '',
       updateStaff: '',
@@ -139,11 +153,15 @@ export default {
     DeleteStaff(staff, index) {
       axios.delete('https://localhost:44390/staffs/delete/' + staff.id
       ).then(response => {
+        console.log(staff);
+        console.log(index);
         this.visualDeps.forEach(function (dep) {
           if (dep.id == staff.department_id) {
             dep.staffs.splice(index, 1);
+            console.log(dep);
           }
         })
+        console.log(this.visualDeps);
         console.log(response.data);
       }).catch((error) => {
         console.log(error);
@@ -229,7 +247,8 @@ export default {
   box-sizing: border-box;
   width: 1200px;
   font-size: 14pt;
-  .depSelect{
+
+  .depSelect {
     padding-left: 1%;
     margin-bottom: auto;
     font-size: 14pt;
@@ -240,11 +259,12 @@ export default {
     box-sizing: border-box;
     outline: none;
     width: 100%;
-    margin-top:15px;
+    margin-top: 15px;
     height: 50px;
     border: 1px solid black;
   }
-  .kkk,.newStaff{
+
+  .staff, .newStaff {
     display: flex;
     text-align: center;
     border-radius: 0;
@@ -254,12 +274,13 @@ export default {
     border: 1px solid black;
     box-sizing: border-box;
 
-    .multiselect,.skillsList {
+    .multiselect, .skillsList {
       margin-top: auto;
       margin-bottom: auto;
       width: 20%;
-      font-size:10pt;
+      font-size: 12pt;
     }
+
     .updateItems, .newItems, .staffItems {
       margin-top: auto;
       margin-bottom: auto;
@@ -318,6 +339,7 @@ export default {
 
       }
     }
+
     .buttonConfirm, .buttonBack, .buttonUpdate, .buttonDelete, .buttonAdd {
       margin: auto;
       cursor: pointer;
