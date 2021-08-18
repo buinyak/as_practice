@@ -1,36 +1,25 @@
-DROP TABLE Staffs;
-DROP TABLE Departments;
-CREATE TABLE Departments (
-  id INT IDENTITY(1,1) PRIMARY KEY,
-  name VARCHAR(100)
-);
-CREATE TABLE Staffs (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    departament_id INT,
-    fio VARCHAR(100),
-	Salary MONEY,
-	FOREIGN KEY (departament_id) REFERENCES Departments(id)
-);
-INSERT INTO Departments (name)
-    VALUES('HR');
-INSERT INTO Staffs (departament_id,fio,	Salary)
-    VALUES
-	(scope_identity(),'Andrei Andreev Andrevich',1000),
-	(scope_identity(),'Kirill Andreev Andrevich',2000),
-	(scope_identity(),'Sergei Andreev Andrevich',3000)
+DROP TABLE Staffs_skills;
+DROP TABLE Skills;
 
-INSERT INTO Departments (name)
-    VALUES('Development');
-INSERT INTO Staffs (departament_id,fio,	Salary)
-    VALUES
-	(scope_identity(),'Misha Andreev Andrevich',43131),
-	(scope_identity(),'Kolya Andreev Andrevich',2003410),
-	(scope_identity(),'Nikita Andreev Andrevich',41313);
-SELECT TOP (1000) [id]
-      ,[name]
-	  FROM [AnReshProbation].[dbo].[Departments]
-SELECT TOP (100) [id]
-      ,[departament_id]
-      ,[fio]
-      ,[Salary]
-	  FROM [AnReshProbation].[dbo].[Staffs]
+CREATE TABLE Skills (
+  Id INT IDENTITY(1,1) PRIMARY KEY,
+  Name VARCHAR(100)
+);
+CREATE TABLE Staffs_skills (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Staff_id INT,
+    Skill_id INT,
+	FOREIGN KEY (Staff_id) REFERENCES Staffs(id) ON DELETE CASCADE,
+	FOREIGN KEY (Skill_id) REFERENCES Skills(id) ON DELETE CASCADE,
+	
+);
+
+DECLARE @id int;
+
+INSERT INTO Skills(name)
+    VALUES('Усидчивость'),('Целеустремленность'),('Скорость');
+
+
+SELECT * FROM Staffs_skills
+
+SELECT * FROM Skills

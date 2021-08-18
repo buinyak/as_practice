@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using as_02.Interfaces;
 using as_02.Repositories;
 using as_02.Services;
+using as_02.Services.Implimentations;
+using as_02.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -17,20 +19,20 @@ namespace as_02
     public class Startup
     {
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        readonly IConfiguration _configuration;
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
 
-            string connectionString = "Server=GB; Initial Catalog=AnReshProbation; Integrated Security=True";
-            services.AddTransient<IStaffRepository, StaffRepository>(provider => new StaffRepository(connectionString));
-            services.AddTransient<IDepartmentRepository, DepartmentRepository>(provider => new DepartmentRepository(connectionString));
-
+            services.AddTransient<IStaffRepository, StaffRepository>();
+            services.AddTransient<IDepartmentRepository, DepartmentRepository>();
+            services.AddTransient<ISkillRepository, SkillRepository>();
+            services.AddTransient<IStaffSkillRepository, StaffSkillRepository>();
+            services.AddTransient<IStaffService, StaffService>();
             services.AddControllers();
 
             services.AddSingleton<ITxtFileRepository, TxtFileRepository>();

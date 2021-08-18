@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,8 @@ namespace as_02.Models
         public int Department_id { get; set; }
         public string Fio { get; set; }
         public float Salary { get; set; }
+
+        public virtual List<Skill> Skills { get; set; }
 
     }
 }

@@ -2,6 +2,7 @@ import VueRouter from 'vue-router'
 import FilesNavigate from "@/components/txtFiles/FilesNavigate";
 import StaffsPage from "@/components/StaffsDepartments/StaffsPage";
 import DepartmentsPage from "@/components/StaffsDepartments/DepartmentsPage";
+import SkillsPage from "@/components/StaffsDepartments/SkillsPage";
 
 
 export default new VueRouter({
@@ -9,7 +10,7 @@ export default new VueRouter({
     routes:[
         {
             path:'/',
-            component:FilesNavigate
+            component:StaffsPage
         },
         {
             path:'/engFiles',
@@ -30,6 +31,10 @@ export default new VueRouter({
         {
             path:'/departments',
             component:DepartmentsPage
+        },
+        {
+            path:'/skills',
+            component:SkillsPage
         }
     ]
 })
