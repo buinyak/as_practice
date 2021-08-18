@@ -13,8 +13,6 @@ namespace as_02.Interfaces
         Staff Get(int id);
         List<Staff> GetAll();
         Staff Update(Staff staff);
-        public dynamic GetAllWithDepartments();
-        public dynamic GetAllByDepartmentId(int id);
-        public ICollection<Department> GetAllWithDepartmentsAndSkills();
+        public ICollection<Department> GetAllByDepartmentsWithSkills();
     }
 }

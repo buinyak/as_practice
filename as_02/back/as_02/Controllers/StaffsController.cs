@@ -86,17 +86,6 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
-        [HttpGet]
-        public ActionResult GetAllWithDepartmentsAndSkills()
-        {
-            try {
-                return Ok(_staffRepository.GetAllWithDepartmentsAndSkills());
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -110,25 +99,13 @@ namespace as_02.Controllers
                 return BadRequest();
             }
         }
-        [HttpGet("{id}")]
-        public IActionResult GetByDepartmentId(int id)
-        {
-            try
-            {
 
-                return Ok(_staffRepository.GetAllByDepartmentId(id));
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
         [HttpGet]
-        public ActionResult GetAllStaffsWithDepartments()
+        public ActionResult GetAllByDepartmentsWithSkills()
         {
             try
             {
-                return Ok(_staffRepository.GetAllWithDepartments());
+                return Ok(_staffRepository.GetAllByDepartmentsWithSkills());
 
             }
             catch
