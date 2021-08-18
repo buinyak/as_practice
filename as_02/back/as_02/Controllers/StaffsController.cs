@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using as_02.Models;
 using as_02.Interfaces;
 using as_02.Services;
+using as_02.Services.Interfaces;
 
 namespace as_02.Controllers
 {
@@ -16,10 +17,12 @@ namespace as_02.Controllers
     public class StaffsController : ControllerBase
     {
         private readonly IStaffRepository _staffRepository;
+        private readonly IStaffService _staffService;
 
-        public StaffsController(IStaffRepository staffRepository)
+        public StaffsController(IStaffRepository staffRepository,IStaffService staffService)
         {
             _staffRepository = staffRepository;
+            _staffService = staffService;
         }
         [HttpPost]
         public IActionResult Create([FromBody]  Staff staff)
@@ -28,6 +31,34 @@ namespace as_02.Controllers
             {
                 ;
                 return Ok(_staffRepository.Create(staff));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        
+        [HttpPost]
+        public IActionResult CreateWithSkills([FromBody]  Staff staff)
+        {
+            try
+            {
+                
+                return Ok(_staffService.CreateWithSkills(staff));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut]
+        public IActionResult UpdateWithSkills([FromBody]  Staff staff)
+        {
+            try
+            {
+
+                return Ok(_staffService.UpdateWithSkills(staff));
             }
             catch
             {

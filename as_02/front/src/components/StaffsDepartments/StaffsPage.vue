@@ -10,10 +10,10 @@
         <input v-model="newStaff.fio" placeholder="ФИО" class="newItem">
         <input v-model="newStaff.salary" placeholder="Зарплата" class="newItem">
       </div>
-      <multiselect v-model="value" :options="deps" :multiple="true" :close-on-select="false" :clear-on-select="false" placeholder="Pick some" label="name" track-by="name" :preselect-first="true">
-        <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template>
+      <multiselect select-label="" v-model="newStaff.skills" :options="skills" :multiple="true" :close-on-select="false" :clear-on-select="false" placeholder="Выберите умения" label="name" track-by="name">
+        <template slot="selection" slot-scope="{ isOpen }"><span class="multiselect__single" v-if="newStaff.skills.length &amp;&amp; !isOpen">Умения</span></template>
       </multiselect>
-      <div @click="CreateStaff()" class="buttonAdd">Добавить</div>
+      <div @click="CreateWithSkills()" class="buttonAdd">Добавить</div>
     </div>
 
     <div class="departmentSelector">
@@ -30,9 +30,7 @@
           <div class="staffItem">{{ staff.fio }}</div>
           <div class="staffItem">{{ staff.salary }}</div>
         </div>
-        <multiselect  v-if="isUpdateStaff!=staff" v-model="value" :options="staff.skills" :multiple="true" :close-on-select="false" :clear-on-select="false" placeholder="Pick some" label="name" track-by="name" :preselect-first="true">
-          <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options</span></template>
-        </multiselect>
+        <div v-if="isUpdateStaff!=staff" class="skillsList"></div>
         <div v-if="isUpdateStaff!=staff" @click="isUpdateStaff=staff;updateStaff = staff;" class="buttonUpdate">Изменить</div>
         <div v-if="isUpdateStaff!=staff" class="buttonDelete" @click="DeleteStaff(staff,index)">Удалить</div>
         <div v-if="isUpdateStaff==staff" class="updateItems">
@@ -44,10 +42,10 @@
           <input v-model="updateStaff.fio" placeholder="ФИО" class="updateItem">
           <input v-model="updateStaff.salary" placeholder="Зарплата" class="updateItem">
         </div>
-        <multiselect  v-if="isUpdateStaff==staff" v-model="value" :options="staff.skills" :multiple="true" :close-on-select="false" :clear-on-select="false" placeholder="Pick some" label="name" track-by="name" :preselect-first="true">
-          <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options</span></template>
+        <multiselect v-if="isUpdateStaff==staff" v-model="staff.skills" :options="skills" :multiple="true" :close-on-select="false" :clear-on-select="false" placeholder="Выберите умения" label="name" track-by="name">
+          <template slot="selection" slot-scope="{ isOpen }"><span class="multiselect__single" v-if="staff.skills.length &amp;&amp; !isOpen">{{ staff.skills.length }} options</span></template>
         </multiselect>
-        <div v-if="isUpdateStaff==staff" @click="UpdateStaff();isUpdateStaff=null;" class="buttonConfirm">Сохранить</div>
+        <div v-if="isUpdateStaff==staff" @click="UpdateStaffWithSkills();isUpdateStaff=null;" class="buttonConfirm">Сохранить</div>
         <div v-if="isUpdateStaff==staff" @click="isUpdateStaff=null" class="buttonBack">Отменить</div>
       </div>
     </div>
@@ -79,11 +77,13 @@ export default {
       allDepsStaffs: [],
       visualDeps: [],
       deps: [],
+      skills:[],
       selectedDepId: '',
       newStaff: {
         department_id: '',
         fio: '',
         salary: '',
+        skills:[]
       },
       isUpdateStaff: '',
       updateStaff: '',
@@ -92,6 +92,7 @@ export default {
   beforeMount() {
     this.GetAllStaffsWithDepartments();
     this.GetAllDepartments();
+    this.GetAllSkills();
 
   },
   methods: {
@@ -109,6 +110,15 @@ export default {
       axios.get('https://localhost:44390/departments/GetAll'
       ).then(response => {
         this.deps = response.data;
+        console.log(response.data);
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
+    GetAllSkills() {
+      axios.get('https://localhost:44390/skills/GetAll'
+      ).then(response => {
+        this.skills = response.data;
         console.log(response.data);
       }).catch((error) => {
         console.log(error);
@@ -157,6 +167,24 @@ export default {
         console.log(error);
       })
     },
+    CreateWithSkills() {
+      if (!this.newStaff.department_id || !this.newStaff.salary || !this.newStaff.fio) {
+        alert("Заполните все данные");
+        return;
+      }
+      this.newStaff.salary = parseInt(this.newStaff.salary);
+      axios.post('https://localhost:44390/staffs/CreateWithSkills', this.newStaff
+      ).then(response => {
+        this.visualDeps.forEach(function (dep) {
+          if (dep.id == response.data.department_id) {
+            dep.staffs.push(response.data);
+          }
+        })
+        console.log(response.data);
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
     UpdateStaff() {
       console.log(this.updateStaff);
 
@@ -166,6 +194,21 @@ export default {
       }
       this.updateStaff.salary = parseInt(this.updateStaff.salary);
       axios.put('https://localhost:44390/staffs/update', this.updateStaff
+      ).then(response => {
+        console.log(response.data);
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
+    UpdateStaffWithSkills() {
+      console.log(this.updateStaff);
+
+      if (!this.updateStaff.department_id || !this.updateStaff.salary || !this.updateStaff.fio) {
+        alert("Заполните все данные");
+        return;
+      }
+      this.updateStaff.salary = parseInt(this.updateStaff.salary);
+      axios.put('https://localhost:44390/staffs/UpdateWithSkills', this.updateStaff
       ).then(response => {
         console.log(response.data);
       }).catch((error) => {
@@ -187,6 +230,7 @@ export default {
   width: 1200px;
   font-size: 14pt;
   .depSelect{
+    padding-left: 1%;
     margin-bottom: auto;
     font-size: 14pt;
     display: inline-flex;
@@ -194,7 +238,6 @@ export default {
     justify-content: center;
     text-align: center;
     box-sizing: border-box;
-    padding: 0;
     outline: none;
     width: 100%;
     margin-top:15px;
@@ -211,7 +254,9 @@ export default {
     border: 1px solid black;
     box-sizing: border-box;
 
-    .multiselect{
+    .multiselect,.skillsList {
+      margin-top: auto;
+      margin-bottom: auto;
       width: 20%;
       font-size:10pt;
     }
@@ -231,7 +276,7 @@ export default {
 
       :first-child {
         width: 5%;
-        margin-left: 2%;
+        margin-left: 3%;
       }
 
       :nth-child(2) {

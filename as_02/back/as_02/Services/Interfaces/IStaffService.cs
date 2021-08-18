@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace as_02.Services.Interfaces
 {
-    interface IStaffSkillsService
+    public interface IStaffService
     {
-        public void AddStaffSkills(List<Skill> skills);
+        public Staff CreateWithSkills(Staff staff);
+        public Staff UpdateWithSkills(Staff staff);
     }
 }

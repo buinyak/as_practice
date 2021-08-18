@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace as_02.Interfaces
 {
-    public interface IStaffSkillsRepository
+    public interface IStaffSkillRepository
     {
-        StaffSkills Create(StaffSkills staffSkills);
+        StaffSkill Create(StaffSkill StaffSkill);
         void Delete(int id);
-        StaffSkills Get(int id);
-        List<StaffSkills> GetAll();
-        StaffSkills Update(StaffSkills staffSkills);
+        StaffSkill Get(int id);
+        List<StaffSkill> GetAll();
+        StaffSkill Update(StaffSkill StaffSkill);
+
+        public StaffSkill FindBySkillIdAndStaffid(StaffSkill staffSkill);
+        public void DeleteByStaffId(int staff_id);
     }
 }
