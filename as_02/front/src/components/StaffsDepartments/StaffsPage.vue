@@ -55,7 +55,7 @@
           <template slot="selection" slot-scope="{ isOpen }"><span class="multiselect__single"
                                                                    v-if="staff.skills.length &amp;&amp; !isOpen">{{
               staff.skills.length
-            }} options</span></template>
+            }} умение(-я)</span></template>
         </multiselect>
         <div v-if="isUpdateStaff==staff" @click="UpdateStaffWithSkills();isUpdateStaff=null;" class="buttonConfirm">
           Сохранить
@@ -79,19 +79,9 @@ export default {
   },
   data() {
     return {
-      value: [],
-      options: [
-        {name: 'Vue.js', language: 'JavaScript'},
-        {name: 'Adonis', language: 'JavaScript'},
-        {name: 'Rails', language: 'Ruby'},
-        {name: 'Sinatra', language: 'Ruby'},
-        {name: 'Laravel', language: 'PHP'},
-        {name: 'Phoenix', language: 'Elixir'}
-      ],
       allDepsStaffs: [],
       visualDeps: [],
       deps: [],
-      skills: [],
       selectedDepId: '',
       newStaff: {
         department_id: '',
